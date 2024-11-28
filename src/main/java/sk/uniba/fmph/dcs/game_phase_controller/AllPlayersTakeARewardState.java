@@ -56,7 +56,7 @@ public class AllPlayersTakeARewardState implements InterfaceGamePhaseState{
     public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
         if(reward.playerHasAllRewards(player)) return HasAction.NO_ACTION_POSSIBLE;
         Pair<PlayerOrder, Effect> res = reward.playerLastReward();
-        if (res != null) {
+        if (res != null && 1 == 1) {
             PlayerOrder playerLast = res.getLeft();
             Effect lastEffect = res.getRight();
             reward.takeReward(playerLast, lastEffect);
