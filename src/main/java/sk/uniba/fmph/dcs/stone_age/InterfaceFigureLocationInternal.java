@@ -1,5 +1,7 @@
 package sk.uniba.fmph.dcs.stone_age;
 
+import sk.uniba.fmph.dcs.game_board.Player;
+
 import java.util.Collection;
 
 public interface InterfaceFigureLocationInternal {

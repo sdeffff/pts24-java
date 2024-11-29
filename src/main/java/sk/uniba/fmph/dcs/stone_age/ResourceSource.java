@@ -3,6 +3,8 @@ package sk.uniba.fmph.dcs.stone_age;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.json.JSONObject;
+import sk.uniba.fmph.dcs.game_board.Player;
+
 import java.util.Map;
 
 public final class ResourceSource implements InterfaceFigureLocationInternal {
