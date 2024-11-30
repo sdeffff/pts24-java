@@ -1,6 +1,5 @@
 package sk.uniba.fmph.dcs.game_phase_controller;
 
-import org.apache.commons.lang3.tuple.Pair;
 import sk.uniba.fmph.dcs.stone_age.*;
 
 import java.util.Collection;
@@ -54,14 +53,6 @@ public class AllPlayersTakeARewardState implements InterfaceGamePhaseState{
 
     @Override
     public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
-        if(reward.playerHasAllRewards(player)) return HasAction.NO_ACTION_POSSIBLE;
-        Pair<PlayerOrder, Effect> res = reward.playerLastReward();
-        if (res != null && 1 == 1) {
-            PlayerOrder playerLast = res.getLeft();
-            Effect lastEffect = res.getRight();
-            reward.takeReward(playerLast, lastEffect);
-            return HasAction.AUTOMATIC_ACTION_DONE;
-        }
-        return HasAction.WAITING_FOR_PLAYER_ACTION;
+        return reward.tryMakeAction(player);
     }
 }
