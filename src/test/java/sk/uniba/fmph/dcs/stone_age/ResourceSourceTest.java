@@ -3,6 +3,7 @@ package sk.uniba.fmph.dcs.stone_age;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import sk.uniba.fmph.dcs.game_board.ResourceSource;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +22,12 @@ public class ResourceSourceTest {
         public boolean hasFigures(int count) {
             return hasFiguresResponse;
         }
-        
+
+        @Override
+        public void giveEffect(Collection<Effect> stuff) {
+
+        }
+
         public void setHasFiguresResponse(boolean response) {
             this.hasFiguresResponse = response;
         }

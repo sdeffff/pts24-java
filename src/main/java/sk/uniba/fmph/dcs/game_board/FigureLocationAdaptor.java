@@ -26,7 +26,7 @@ public class FigureLocationAdaptor implements InterfaceFigureLocation {
                 return pl;
             }
         }
-        return ActionResult.FAILURE;
+        return null;
     }
 
     // Places the specified number of figures for the given player
@@ -46,17 +46,15 @@ public class FigureLocationAdaptor implements InterfaceFigureLocation {
         if (pl != null) {
             return figureLocation.tryToPlaceFigures(pl, count);
         }
-        return ActionResult.FAILURE;
+        return HasAction.NO_ACTION_POSSIBLE;
     }
 
     // Performs an action for the player using input and output resources
     @Override
     public ActionResult makeAction(PlayerOrder player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
-        Effect[] input = inputResources.toArray(new Effect[0]);
-        Effect[] output = outputResources.toArray(new Effect[0]);
         Player pl = getPlayerOrder(player);
         if (pl != null) {
-            return figureLocation.makeAction(pl, input, output);
+            return figureLocation.makeAction(pl, inputResources, outputResources);
         }
         return ActionResult.FAILURE;
     }
@@ -78,7 +76,7 @@ public class FigureLocationAdaptor implements InterfaceFigureLocation {
         if (pl != null) {
             figureLocation.tryToMakeAction(pl);
         }
-        return ActionResult.FAILURE;
+        return HasAction.NO_ACTION_POSSIBLE;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package sk.uniba.fmph.dcs.player_board;
 
+import sk.uniba.fmph.dcs.game_board.CivilizationCardDeck;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 
 import java.util.Collection;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The {@code PlayerResourcesAndFood} class represents a player's resources and food in the Stone Age game.
+ * The {@code PlayerResourcesAndFood} class represents a player's resources and food in the game.
  * It manages the player's inventory by allowing the addition and removal of resources,
  * checking resource availability, and calculating resources for final scoring.
  */
@@ -94,8 +95,6 @@ public class PlayerResourcesAndFood {
 
     /**
      * Calculates the total number of non-food resources the player has for final scoring.
-     * In the Stone Age game, resources other than food contribute to the player's score at the end of the game.
-     *
      * @return the total number of non-food resources.
      */
     public int numberOfResourcesForFinalPoints() {
@@ -110,9 +109,6 @@ public class PlayerResourcesAndFood {
     }
 
     /**
-     * Returns a string representation of the player's current resources.
-     * The string includes each resource type and the quantity the player has.
-     *
      * @return a string representing the player's resources, formatted as "RESOURCE: quantity, ...".
      */
     public String state() {

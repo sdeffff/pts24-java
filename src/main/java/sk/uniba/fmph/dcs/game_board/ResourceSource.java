@@ -1,10 +1,12 @@
-package sk.uniba.fmph.dcs.stone_age;
+package sk.uniba.fmph.dcs.game_board;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import org.json.JSONObject;
+import sk.uniba.fmph.dcs.stone_age.*;
+
 import java.util.Map;
 
 public final class ResourceSource implements InterfaceFigureLocationInternal {
@@ -53,28 +55,24 @@ public final class ResourceSource implements InterfaceFigureLocationInternal {
     }
 
     @Override
-    public ActionResult makeAction(Player player, Effect[] inputResources, Effect[] outputResources) {
-        // Convert arrays to collections for existing logic
-        Collection<Effect> inputs = Arrays.asList(inputResources);
-        Collection<Effect> outputs = Arrays.asList(outputResources);
-        
+    public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
         // Verify it's this player's figures
         if (!hasFiguresFromPlayer(player.playerOrder())) {
             return ActionResult.FAILURE;
         }
 
         // Resource sources don't take input resources
-        if (!inputs.isEmpty()) {
+        if (!inputResources.isEmpty()) {
             return ActionResult.FAILURE;
         }
 
         // Resource sources must output exactly one type of resource per figure
         int playerFigureCount = countPlayerFigures(player.playerOrder());
-        if (outputs.size() != playerFigureCount) {
+        if (outputResources.size() != playerFigureCount) {
             return ActionResult.FAILURE;
         }
         
-        for (Effect output : outputs) {
+        for (Effect output : outputResources) {
             if (output != this.resource) {
                 return ActionResult.FAILURE;
             }
@@ -155,7 +153,7 @@ public final class ResourceSource implements InterfaceFigureLocationInternal {
         Map<String, Object> state = Map.of(
             "name", name,
             "resource", resource,
-            "maxFigures", maxFigures, 
+            "maxFigures", maxFigures,
             "maxFigureColors", maxFigureColors,
             "figures", figures.stream().map(PlayerOrder::getOrder).toList()
         );

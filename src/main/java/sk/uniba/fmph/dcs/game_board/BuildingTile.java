@@ -5,12 +5,10 @@ import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.Player;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
 import sk.uniba.fmph.dcs.stone_age.ActionResult;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.OptionalInt;
+
+import java.util.*;
+
 import org.json.JSONObject;
-import java.util.Map;
 
 public class BuildingTile implements InterfaceFigureLocationInternal {
     private final Building building;
@@ -43,20 +41,18 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
     }
 
     @Override
-    public ActionResult makeAction(Player player, Effect[] inputResources, Effect[] outputResources) {
+    public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
         if (figures.isEmpty() || !figures.get(0).equals(player.playerOrder())) {
             return ActionResult.FAILURE;
         }
-        
-        Collection<Effect> resources = List.of(inputResources);
-        
-        OptionalInt points = building.build(resources);
+
+        OptionalInt points = building.build(inputResources);
         if (!points.isPresent()) {
             return ActionResult.FAILURE;
         }
         
         // Give points to player
-        player.playerBoard().giveEffect(new Effect[]{Effect.BUILDING});
+        player.playerBoard().giveEffect(Collections.singleton(Effect.BUILDING));
         return ActionResult.ACTION_DONE;
     }
 

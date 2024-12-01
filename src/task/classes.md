@@ -153,7 +153,7 @@ Implements actions Hunting, Forest, Clay mound, Quarry, River.
 
 *Estimation:* M
 
-### CurrectThrow class
+### CurrentThrow class
 
 Handles die throws for resources (Food, Wood, Clay, Stone, Gold) and with improving the throws with tools.
 
@@ -169,7 +169,7 @@ Encapsulates the random effect.
 
 *Estimation:* XS
 
-### CivilisationCardPlace class
+### CivilizationCardPlace class
 
 Implements civilisation card actions 
 

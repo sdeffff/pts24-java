@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * The {@code MakeActionState} class represents the "Make Action" phase in the Stone Age game.
+ * The {@code MakeActionState} class represents the "Make Action" phase in the game.
  * During this phase, the current player performs actions with their placed figures on the board.
  * This class implements the {@link InterfaceGamePhaseState} interface and provides the logic
  * for handling player actions specific to this phase.

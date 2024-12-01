@@ -2,3 +2,9 @@ target
 .Makefile.swp
 .idea/
 .aider.*
+.DS_Store
+src/main/java/sk/uniba/fmph/dcs/game_board/CivilizationCardDeck.java
+src/main/java/sk/uniba/fmph/dcs/game_board/CivilizationCardPlace.java
+src/main/java/sk/uniba/fmph/dcs/game_board/CurrentThrow.java
+src/main/java/sk/uniba/fmph/dcs/game_board/ResourceSource.java
+src/test/java/sk/uniba/fmph/dcs/game_board/CivilizationCardPlaceTest.java
