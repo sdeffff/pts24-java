@@ -15,21 +15,21 @@ public class GetSomethingChoiceTest {
     private GetSomethingChoice getSomethingChoice;
     private Player player1;
     private Player player2;
-    private Player getCardPlayerMaker(Player player, int orderNum, GetCardPlayerBoardGameBoard board) {
+    public static Player getCardPlayerMaker(Player player, int orderNum, InterfacePlayerBoardGameBoard board) {
             PlayerOrder order = new PlayerOrder(orderNum, 2);
             player = new Player() {
 
                 public PlayerOrder playerOrder() {
                     return order;
                 }
-                public GetCardPlayerBoardGameBoard playerBoard() {
+                public InterfacePlayerBoardGameBoard playerBoard() {
                     return board;
                 }
             };
             return player;
         }
 
-    private class GetCardPlayerBoardGameBoard implements InterfacePlayerBoardGameBoard {
+    public static class GetCardPlayerBoardGameBoard implements InterfacePlayerBoardGameBoard {
         private List<Effect> resources = new ArrayList<>();
         private int figures = 0;
         private List<CivilizationCard> cards = new ArrayList<>();
