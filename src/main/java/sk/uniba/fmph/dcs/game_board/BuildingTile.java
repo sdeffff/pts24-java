@@ -5,20 +5,19 @@ import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.Player;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
 import sk.uniba.fmph.dcs.stone_age.ActionResult;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.OptionalInt;
+
+import java.util.*;
+
 import org.json.JSONObject;
-import java.util.Map;
 
 public class BuildingTile implements InterfaceFigureLocationInternal {
-    private final Building building;
+    private final Stack<Building> buildings;
     private final ArrayList<PlayerOrder> figures;
     private static final int MAX_FIGURES = 1;
     
-    public BuildingTile(Building building) {
-        this.building = building;
+    public BuildingTile(List<Building> building) {
+        this.buildings = new Stack<>();
+        this.buildings.addAll(building);
         this.figures = new ArrayList<>();
     }
 
@@ -49,14 +48,18 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
         }
         
         Collection<Effect> resources = List.of(inputResources);
-        
-        OptionalInt points = building.build(resources);
-        if (!points.isPresent()) {
+
+        if(buildings.isEmpty()){
             return ActionResult.FAILURE;
         }
+        OptionalInt points = buildings.pop().build(resources);
         
         // Give points to player
-        player.playerBoard().giveEffect(new Effect[]{Effect.BUILDING});
+        List<Effect> pointsToGive = new ArrayList<>();
+        for(int i=0; i<points.getAsInt(); i++){
+            pointsToGive.add(Effect.POINT);
+        }
+        player.playerBoard().giveEffect(pointsToGive);
         return ActionResult.ACTION_DONE;
     }
 
@@ -79,13 +82,16 @@ public class BuildingTile implements InterfaceFigureLocationInternal {
 
     @Override
     public boolean newTurn() {
+        if(buildings.isEmpty()){
+            return true;
+        }
         figures.clear();
         return false;
     }
 
     public String state() {
         Map<String, Object> state = Map.of(
-            "building", building.state(),
+            "building", buildings,
             "figures", figures.stream().map(PlayerOrder::getOrder).toList()
         );
         return new JSONObject(state).toString();
