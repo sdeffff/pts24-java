@@ -6,6 +6,7 @@ import sk.uniba.fmph.dcs.stone_age.Player;
 import java.util.Optional;
 
 public class GetCard implements EvaluateCivilizationCardImmediateEffect{
+
     private CivilizationCardDeck deck;
 
     public GetCard(CivilizationCardDeck deck){
@@ -21,6 +22,8 @@ public class GetCard implements EvaluateCivilizationCardImmediateEffect{
             }else{
                 return false;
             }
+
+            return true;
         }else{
             return false;
         }

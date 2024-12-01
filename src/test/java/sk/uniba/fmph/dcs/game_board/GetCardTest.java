@@ -16,7 +16,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class GetCardTest {
-
     private Player player;
     private CivilizationCardDeck deck;
     private GetCard getCard;
