@@ -16,7 +16,7 @@ public class GetSomethingChoiceTest {
     private Player player1;
     private Player player2;
     public static Player getCardPlayerMaker(Player player, int orderNum, InterfacePlayerBoardGameBoard board) {
-            PlayerOrder order = new PlayerOrder(orderNum, 2);
+            PlayerOrder order = new PlayerOrder(orderNum, 4);
             player = new Player() {
 
                 public PlayerOrder playerOrder() {
