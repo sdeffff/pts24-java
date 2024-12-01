@@ -1,27 +1,26 @@
 package sk.uniba.fmph.dcs.player_board;
 
 import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
-
-import java.util.*;
+import sk.uniba.fmph.dcs.stone_age.TribeFedStatus;
 
 public class PlayerBoard implements InterfaceGetState {
     private int points;
     private int houses;
-//    private final PlayerResourcesAndFood playerResourcesAndFood;
+    private final PlayerResourcesAndFood playerResourcesAndFood;
     private final PlayerFigures playerFigures;
     private final PlayerTools playerTools;
-//    private final PlayerCivilisationCards playerCivilisationCards;
-//    private final TribeFedStatus tribeFedStatus;
+    private final PlayerCivilisationCards playerCivilisationCards;
+    private final TribeFedStatus tribeFedStatus;
 
     private boolean endOfGamePointsAdded;
 
-//    public PlayerBoard(final PlayerCivilisationCards pcc, final PlayerFigures pf, final PlayerResourcesAndFood prf,
+    public PlayerBoard(final PlayerCivilisationCards pcc, final PlayerFigures pf, final PlayerResourcesAndFood prf,
                        final PlayerTools pt, final TribeFedStatus tfs) {
-//        this.playerCivilisationCards = pcc;
-//        this.playerFigures = pf;
-//        this.playerResourcesAndFood = prf;
-//        this.playerTools = pt;
-//        this.tribeFedStatus = tfs;
+        this.playerCivilisationCards = pcc;
+        this.playerFigures = pf;
+        this.playerResourcesAndFood = prf;
+        this.playerTools = pt;
+        this.tribeFedStatus = tfs;
 
         this.points = 0;
         this.houses = 0;
@@ -29,11 +28,11 @@ public class PlayerBoard implements InterfaceGetState {
     }
 
     public PlayerBoard() {
-//        this.playerResourcesAndFood = new PlayerResourcesAndFood();
+        this.playerResourcesAndFood = new PlayerResourcesAndFood();
         this.playerFigures = new PlayerFigures();
         this.playerTools = new PlayerTools();
-//        this.playerCivilisationCards = new PlayerCivilisationCards();
-//        this.tribeFedStatus = new TribeFedStatus(this.playerResourcesAndFood, this.playerFigures);
+        this.playerCivilisationCards = new PlayerCivilisationCards();
+        this.tribeFedStatus = new TribeFedStatus(this.playerFigures);
 
         this.points = 0;
         this.houses = 0;
@@ -49,7 +48,7 @@ public class PlayerBoard implements InterfaceGetState {
      * the status of the player's tools to unused.
      */
     public void newTurn() {
-//        this.tribeFedStatus.newTurn();
+        this.tribeFedStatus.newTurn();
         this.playerFigures.newTurn();
         this.playerTools.newTurn();
     }
@@ -59,9 +58,9 @@ public class PlayerBoard implements InterfaceGetState {
      *
      * @return the PlayerResourcesAndFood object containing the player's resources and food.
      */
-//    public PlayerResourcesAndFood getPlayerResourcesAndFood() {
-//        return this.playerResourcesAndFood;
-//    }
+    public PlayerResourcesAndFood getPlayerResourcesAndFood() {
+        return this.playerResourcesAndFood;
+    }
 
     /**
      * Retrieves the current figures status for the player.
@@ -86,18 +85,18 @@ public class PlayerBoard implements InterfaceGetState {
      *
      * @return the PlayerCivilisationCards object containing the player's civilization cards.
      */
-//    public PlayerCivilisationCards getPlayerCivilisationCards() {
-//        return this.playerCivilisationCards;
-//    }
+    public PlayerCivilisationCards getPlayerCivilisationCards() {
+        return this.playerCivilisationCards;
+    }
 
     /**
      * Retrieves the current fed status of the tribe.
      *
      * @return the TribeFedStatus object representing the current fed status of the tribe.
      */
-//    public TribeFedStatus getTribeFedStatus() {
-//        return this.tribeFedStatus;
-//    }
+    public TribeFedStatus getTribeFedStatus() {
+        return this.tribeFedStatus;
+    }
 
     /**
      * Adds the specified number of points to the player's total points.
@@ -127,10 +126,10 @@ public class PlayerBoard implements InterfaceGetState {
         if (this.endOfGamePointsAdded) {
             return;
         }
-//        this.points += this.playerCivilisationCards.calculateEndOfGameCivilisationCardsPoints(this.houses,
-//                this.playerTools.getToolsCount(), this.tribeFedStatus.getFieldsCount(),
-//                this.playerFigures.getTotalFigures());
-//        this.points += this.playerResourcesAndFood.numberOfResourcesForFinalPoints();
+        this.points += this.playerCivilisationCards.calculateEndOfGameCivilisationCardsPoints(this.houses,
+                this.playerTools.getTools(), this.tribeFedStatus.getFields(),
+                this.playerFigures.getTotalFigures());
+        this.points += this.playerResourcesAndFood.numberOfResourcesForFinalPoints();
 
         this.endOfGamePointsAdded = true;
     }
@@ -143,8 +142,8 @@ public class PlayerBoard implements InterfaceGetState {
      */
     @Override
     public String state() {
-//        return "Points: " + this.points + ", houses: " + this.houses + "\n" + this.playerResourcesAndFood.state() + "\n"
-//                + this.playerFigures.state() + "\n" + this.playerTools.state() + "\n"
-//                + this.playerCivilisationCards.state() + "\n" + this.tribeFedStatus.state();
+        return "Points: " + this.points + ", houses: " + this.houses + "\n" + this.playerResourcesAndFood.state() + "\n"
+                + this.playerFigures.state() + "\n" + this.playerTools.state() + "\n"
+                + this.playerCivilisationCards.state() + "\n" + this.tribeFedStatus.state();
     }
 }

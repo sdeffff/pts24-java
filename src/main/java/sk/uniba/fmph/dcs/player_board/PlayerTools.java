@@ -19,6 +19,10 @@ public class PlayerTools implements InterfaceGetState {
         roundToolsCount = totalToolsCount;
     }
 
+    public int getTools() {
+        return this.totalToolsCount;
+    }
+
     public void addTool(){
         if(totalToolsCount < 12) {
             totalToolsCount++;

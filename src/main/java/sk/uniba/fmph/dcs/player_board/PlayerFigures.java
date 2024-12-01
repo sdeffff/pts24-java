@@ -1,6 +1,9 @@
 package sk.uniba.fmph.dcs.player_board;
 
+import org.json.JSONObject;
 import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
+
+import java.util.Map;
 
 public class PlayerFigures implements InterfaceGetState {
 private int totalFigures;
@@ -35,11 +38,12 @@ private int figures;
 
     @Override
     public String state(){
-        if(figures > 0){
-            return "Player still have " + figures + " to place";
-        }else{
-            return "Player doesn't have any figure to place on the board";
-        }
+        Map<String, Object> state = Map.of(
+                "figures", figures,
+                "totalFigures", totalFigures
+        );
+
+        return new JSONObject(state).toString();
     }
 
 }
