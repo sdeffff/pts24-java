@@ -34,8 +34,6 @@ public class AllPlayersTakeReward implements EvaluateCivilizationCardImmediateEf
         if(!dices.contains(rewards.indexOf(choice))){
             return false;
 
-
-
    }
         menu.takeReward(player.playerOrder(), choice);
         return true;
