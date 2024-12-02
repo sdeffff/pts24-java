@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class RewardMenu implements InterfaceTakeReward {
 
-    private ArrayList<Effect> rewards;
+    public ArrayList<Effect> rewards;
     private Player[] players;
     private ArrayList<PlayerOrder> remainingPlayers;
 

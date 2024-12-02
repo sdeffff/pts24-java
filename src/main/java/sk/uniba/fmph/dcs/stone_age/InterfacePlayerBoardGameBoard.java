@@ -3,9 +3,11 @@ package sk.uniba.fmph.dcs.stone_age;
 import sk.uniba.fmph.dcs.game_board.CivilizationCard;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface InterfacePlayerBoardGameBoard {
+    void giveEffect(List<Effect> stuff);
     void giveFigure();
     void giveEndOfGameEffect(Collection<EndOfGameEffect> stuff);
     void giveCard(CivilizationCard card);

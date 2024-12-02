@@ -28,9 +28,13 @@ public class AllPlayersTakeReward implements EvaluateCivilizationCardImmediateEf
     @Override
     public boolean performEffect(Player player, Effect choice) {
         List<Integer> dices = new ArrayList<>();
+        List<Effect> rewards = menu.rewards;
         helper(Throw.throw_(amountOfPlayers), dices);
         InterfacePlayerBoardGameBoard playerBoard = player.playerBoard();
-
-        return false;
+        if(!dices.contains(rewards.indexOf(choice))){
+            return false;
+        }
+        menu.takeReward(player.playerOrder(), choice);
+        return true;
     }
 }
