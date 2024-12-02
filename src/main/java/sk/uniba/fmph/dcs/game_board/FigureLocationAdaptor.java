@@ -1,13 +1,10 @@
 package sk.uniba.fmph.dcs.game_board;
 
-import sk.uniba.fmph.dcs.stone_age.HasAction;
-import sk.uniba.fmph.dcs.stone_age.Effect;
-import sk.uniba.fmph.dcs.stone_age.ActionResult;
-import sk.uniba.fmph.dcs.stone_age.InterfaceFigureLocation;
-import sk.uniba.fmph.dcs.stone_age.Player;
-import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
+import sk.uniba.fmph.dcs.game_board.InterfaceFigureLocationInternal;
+import sk.uniba.fmph.dcs.stone_age.*;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 public class FigureLocationAdaptor implements InterfaceFigureLocation {
     private final InterfaceFigureLocationInternal figureLocation;
@@ -74,7 +71,7 @@ public class FigureLocationAdaptor implements InterfaceFigureLocation {
     public HasAction tryToMakeAction(PlayerOrder player) {
         Player pl = getPlayerOrder(player);
         if (pl != null) {
-            figureLocation.tryToMakeAction(pl);
+            return figureLocation.tryToMakeAction(pl);
         }
         return HasAction.NO_ACTION_POSSIBLE;
     }

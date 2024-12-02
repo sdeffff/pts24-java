@@ -14,10 +14,10 @@ public class PlayerTools implements InterfaceGetState {
     private int roundToolsCount;
     private final List<Integer> additionalTools = new ArrayList<>();
 
-    public void newTurn() {
+    public boolean newTurn(){
         Arrays.fill(usedTools, false);
         roundToolsCount = totalToolsCount;
-        totalToolsCount = 0;
+        return false; // Does not trigger game end
     }
 
     public void addTool() {

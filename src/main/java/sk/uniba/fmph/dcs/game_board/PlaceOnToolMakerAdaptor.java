@@ -1,5 +1,6 @@
 package sk.uniba.fmph.dcs.game_board;
 
+import java.util.Collection;
 import sk.uniba.fmph.dcs.stone_age.ActionResult;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
@@ -37,7 +38,7 @@ private final ToolMakerHutFields toolMakerHutFields;
     }
 
     @Override
-    public ActionResult makeAction(Player player, Effect[] inputResources, Effect[] outputResources) {
+    public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
         if(!toolMakerHutFields.canPlaceOnToolMaker(player)){
             return ActionResult.FAILURE;
         }
