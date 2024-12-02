@@ -31,8 +31,8 @@ public class PlaceFiguresStateTest {
         }
         
         @Override
-        public ActionResult makeAction(PlayerOrder player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
-            return ActionResult.FAILURE;
+        public boolean makeAction(PlayerOrder player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
+            return boolean.FAILURE;
         }
         
         @Override
@@ -71,20 +71,20 @@ public class PlaceFiguresStateTest {
     @Test
     public void testPlaceFiguresSuccess() {
         mockLocation.setNextPlaceResponse(true);
-        assertEquals(ActionResult.ACTION_DONE, 
+        assertEquals(boolean.ACTION_DONE, 
             state.placeFigures(player, Location.HUNTING_GROUNDS, 1));
     }
 
     @Test
     public void testPlaceFiguresFailure() {
         mockLocation.setNextPlaceResponse(false);
-        assertEquals(ActionResult.FAILURE,
+        assertEquals(boolean.FAILURE,
             state.placeFigures(player, Location.HUNTING_GROUNDS, 1));
     }
 
     @Test
     public void testPlaceFiguresInvalidLocation() {
-        assertEquals(ActionResult.FAILURE,
+        assertEquals(boolean.FAILURE,
             state.placeFigures(player, Location.TOOL_MAKER, 1));
     }
 
@@ -104,19 +104,19 @@ public class PlaceFiguresStateTest {
 
     @Test
     public void testInvalidActionsReturnFailure() {
-        assertEquals(ActionResult.FAILURE,
+        assertEquals(boolean.FAILURE,
             state.makeAction(player, Location.HUNTING_GROUNDS, new ArrayList<>(), new ArrayList<>()));
-        assertEquals(ActionResult.FAILURE,
+        assertEquals(boolean.FAILURE,
             state.skipAction(player, Location.HUNTING_GROUNDS));
-        assertEquals(ActionResult.FAILURE,
+        assertEquals(boolean.FAILURE,
             state.useTools(player, 0));
-        assertEquals(ActionResult.FAILURE,
+        assertEquals(boolean.FAILURE,
             state.noMoreToolsThisThrow(player));
-        assertEquals(ActionResult.FAILURE,
+        assertEquals(boolean.FAILURE,
             state.feedTribe(player, new ArrayList<>()));
-        assertEquals(ActionResult.FAILURE,
+        assertEquals(boolean.FAILURE,
             state.doNotFeedThisTurn(player));
-        assertEquals(ActionResult.FAILURE,
+        assertEquals(boolean.FAILURE,
             state.makeAllPlayersTakeARewardChoice(player, Effect.WOOD));
     }
 }

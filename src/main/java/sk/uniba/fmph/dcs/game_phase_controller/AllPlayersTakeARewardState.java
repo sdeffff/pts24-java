@@ -10,45 +10,45 @@ public class AllPlayersTakeARewardState implements InterfaceGamePhaseState{
 
 
     @Override
-    public ActionResult placeFigures(PlayerOrder player, Location location, int figuresCount) {
-        return ActionResult.FAILURE;
+    public boolean placeFigures(PlayerOrder player, Location location, int figuresCount) {
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources, Collection<Effect> outputResources) {
-        return ActionResult.FAILURE;
+    public boolean makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources, Collection<Effect> outputResources) {
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult skipAction(PlayerOrder player, Location location) {
-        return ActionResult.FAILURE;
+    public boolean skipAction(PlayerOrder player, Location location) {
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult useTools(PlayerOrder player, int toolIndex) {
-        return ActionResult.FAILURE;
+    public boolean useTools(PlayerOrder player, int toolIndex) {
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult noMoreToolsThisThrow(PlayerOrder player) {
-        return ActionResult.FAILURE;
+    public boolean noMoreToolsThisThrow(PlayerOrder player) {
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult feedTribe(PlayerOrder player, Collection<Effect> resources) {
-        return ActionResult.FAILURE;
+    public boolean feedTribe(PlayerOrder player, Collection<Effect> resources) {
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult doNotFeedThisTurn(PlayerOrder player) {
-        return ActionResult.FAILURE;
+    public boolean doNotFeedThisTurn(PlayerOrder player) {
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward) {
+    public boolean makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward) {
         return this.reward.takeReward(player, reward)
-        ? ActionResult.ACTION_DONE
-        : ActionResult.FAILURE;
+        ? boolean.ACTION_DONE
+        : boolean.FAILURE;
     }
 
     @Override

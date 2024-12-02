@@ -36,116 +36,116 @@ public class NewRoundState implements InterfaceGamePhaseState {
 
     /**
      * Players cannot place figures during the "New Round" phase.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param player        the player attempting to place figures
      * @param location      the location where the player wants to place figures
      * @param figuresCount  the number of figures the player wants to place
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult placeFigures(PlayerOrder player, Location location, int figuresCount) {
+    public boolean placeFigures(PlayerOrder player, Location location, int figuresCount) {
         // Players cannot place figures during the 'New Round' phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**
      * Players cannot perform actions during the "New Round" phase.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param player           the player attempting to make an action
      * @param location         the location where the action is to be made
      * @param inputResources   resources provided as input for the action
      * @param outputResources  resources expected as output from the action
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources,
+    public boolean makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources,
                                    Collection<Effect> outputResources) {
         // Players cannot make actions during the 'New Round' phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**
      * Skipping actions is not applicable during the "New Round" phase.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param player    the player attempting to skip an action
      * @param location  the location where the action is to be skipped
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult skipAction(PlayerOrder player, Location location) {
+    public boolean skipAction(PlayerOrder player, Location location) {
         // No actions to skip during the 'New Round' phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**
      * Tool usage is not applicable during the "New Round" phase.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param player    the player attempting to use a tool
      * @param toolIndex the index of the tool being used
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult useTools(PlayerOrder player, int toolIndex) {
+    public boolean useTools(PlayerOrder player, int toolIndex) {
         // Tool usage is not applicable during the 'New Round' phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**
      * Indicating that the player will not use more tools for the current throw is not applicable.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param player the player indicating no more tool usage
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult noMoreToolsThisThrow(PlayerOrder player) {
+    public boolean noMoreToolsThisThrow(PlayerOrder player) {
         // Not applicable during the 'New Round' phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**
      * Feeding the tribe is not handled during the "New Round" phase.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param player     the player attempting to feed their tribe
      * @param resources  the resources being used to feed the tribe
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult feedTribe(PlayerOrder player, Collection<Effect> resources) {
+    public boolean feedTribe(PlayerOrder player, Collection<Effect> resources) {
         // Feeding the tribe happens during the 'Feed Tribe' phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**
      * Indicating that the player chooses not to feed their tribe this turn is not applicable.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param player the player choosing not to feed their tribe
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult doNotFeedThisTurn(PlayerOrder player) {
+    public boolean doNotFeedThisTurn(PlayerOrder player) {
         // Not applicable during the 'New Round' phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**
      * Making all players take a reward choice is not applicable during the "New Round" phase.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param player  the player attempting to make a reward choice
      * @param reward  the reward being chosen
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward) {
+    public boolean makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward) {
         // Not applicable during the 'New Round' phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**

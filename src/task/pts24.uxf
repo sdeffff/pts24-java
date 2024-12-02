@@ -103,19 +103,19 @@ GameEnd
 </panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2240</x><y>840</y><w>490</w><h>200</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
 InterfaceGamePhaseState
 --
-placeFigures(player: PlayerOrder, location:Location, figuresCount: int): ActionResult
+placeFigures(player: PlayerOrder, location:Location, figuresCount: int): boolean
 makeAction(player: PlayerOrder, location: Location, inputResources: Effect[], 
-    outputResources: Effect[]): ActionResult
-skipAction(player: PlayerOrder, location: Location): ActionResult
-useTools(player: PlayerOrder, toolIndex: int):ActionResult
-noMoreToolsThisThrow(player: PlayerOrder): ActionResult
-feedTribe(player: PlayerOrder, resources: Effect[]): ActionResult
-doNotFeedThisTurn(player: PlayerOrder): ActionResult
-makeAllPlayersTakeARewardChoice(player: PlayerOrder, reward: Effect): ActionResult
+    outputResources: Effect[]): boolean
+skipAction(player: PlayerOrder, location: Location): boolean
+useTools(player: PlayerOrder, toolIndex: int):boolean
+noMoreToolsThisThrow(player: PlayerOrder): boolean
+feedTribe(player: PlayerOrder, resources: Effect[]): boolean
+doNotFeedThisTurn(player: PlayerOrder): boolean
+makeAllPlayersTakeARewardChoice(player: PlayerOrder, reward: Effect): boolean
 tryToMakeAutomaticAction(player: PlayerOrder): HasAction
 
 </panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2490</x><y>810</y><w>30</w><h>50</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;30;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>60</x><y>1900</y><w>220</w><h>100</h></coordinates><panel_attributes>&lt;&lt;Enumeration&gt;&gt;
-ActionResult
+boolean
 --
 Failure
 ActionDone
@@ -323,7 +323,7 @@ InterfaceFigureLocation
 placeFigures(player: PlayerOrder, figureCount: int):bool
 tryToPlaceFigures(player: PlayerOrder, count: int): HasAction
 makeAction(player: PlayerOrder, inputResources: Effect[], 
-    outputResources: Effect[]): ActionResult
+    outputResources: Effect[]): boolean
 skipAction(player: PlayerOrder): bool
 tryToMakeAction(player: PlayerOrder): HasAction
 newTurn(): bool {returns true if end of game is implied 
@@ -374,7 +374,7 @@ InterfaceFigureLocationInternal
 placeFigures(player: Player, figureCount: int):bool
 tryToPlaceFigures(player: Player, count: int): HasAction
 makeAction(player: Player, inputResources: Effect[], 
-    outputResources: Effect[]): ActionResult
+    outputResources: Effect[]): boolean
 skipAction(player: Player): bool
 tryToMakeAction(player: Player): HasAction
 newTurn(): bool {returns true if end of game is implied by 

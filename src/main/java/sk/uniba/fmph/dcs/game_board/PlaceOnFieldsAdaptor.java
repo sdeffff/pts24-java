@@ -1,7 +1,7 @@
 package sk.uniba.fmph.dcs.game_board;
 
 import java.util.Collection;
-import sk.uniba.fmph.dcs.stone_age.ActionResult;
+import sk.uniba.fmph.dcs.stone_age.boolean;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
 import sk.uniba.fmph.dcs.stone_age.Player;
@@ -36,16 +36,16 @@ public class PlaceOnFieldsAdaptor implements InterfaceFigureLocationInternal {
     }
 
     @Override
-    public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
+    public boolean makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
         if(!toolMakerHutFields.canPlaceOnFields(player)){
-            return ActionResult.FAILURE;
+            return boolean.FAILURE;
         }
 
         if(toolMakerHutFields.actionFields(player)) {
-            return ActionResult.ACTION_DONE;
+            return boolean.ACTION_DONE;
         }
 
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     @Override

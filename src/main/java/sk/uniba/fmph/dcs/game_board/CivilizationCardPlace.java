@@ -90,17 +90,17 @@ public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
      * @param player         The player performing the action.
      * @param inputResources Resources the player is using to acquire the card.
      * @param outputResources Effects/resources gained from the card (unused here).
-     * @return The result of the action as ActionResult.
+     * @return The result of the action as boolean.
      */
     @Override
-    public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
+    public boolean makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
         if (!canMakeAction(player, inputResources)) {
-            return ActionResult.FAILURE;
+            return boolean.FAILURE;
         }
         applyCardEffects(player, outputResources);
         currentCivilizationCard = deck.getTop().orElse(null);
         actionMade = true;
-        return ActionResult.ACTION_DONE;
+        return boolean.ACTION_DONE;
     }
 
     private boolean canMakeAction(Player player, Collection<Effect> inputResources) {

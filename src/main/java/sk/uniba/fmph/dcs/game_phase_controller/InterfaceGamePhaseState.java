@@ -3,27 +3,27 @@ package sk.uniba.fmph.dcs.game_phase_controller;
 import java.util.Collection;
 import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
 import sk.uniba.fmph.dcs.stone_age.Location;
-import sk.uniba.fmph.dcs.stone_age.ActionResult;
+import sk.uniba.fmph.dcs.stone_age.boolean;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 
 public interface InterfaceGamePhaseState {
-    ActionResult placeFigures(PlayerOrder player, Location location, int figuresCount);
+    boolean placeFigures(PlayerOrder player, Location location, int figuresCount);
 
-    ActionResult makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources,
+    boolean makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources,
             Collection<Effect> outputResources);
 
-    ActionResult skipAction(PlayerOrder player, Location location);
+    boolean skipAction(PlayerOrder player, Location location);
 
-    ActionResult useTools(PlayerOrder player, int toolIndex);
+    boolean useTools(PlayerOrder player, int toolIndex);
 
-    ActionResult noMoreToolsThisThrow(PlayerOrder player);
+    boolean noMoreToolsThisThrow(PlayerOrder player);
 
-    ActionResult feedTribe(PlayerOrder player, Collection<Effect> resources);
+    boolean feedTribe(PlayerOrder player, Collection<Effect> resources);
 
-    ActionResult doNotFeedThisTurn(PlayerOrder player);
+    boolean doNotFeedThisTurn(PlayerOrder player);
 
-    ActionResult makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward);
+    boolean makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward);
 
     HasAction tryToMakeAutomaticAction(PlayerOrder player);
 }

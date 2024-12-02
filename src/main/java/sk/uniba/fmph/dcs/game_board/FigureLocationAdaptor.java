@@ -2,7 +2,7 @@ package sk.uniba.fmph.dcs.game_board;
 
 import sk.uniba.fmph.dcs.stone_age.HasAction;
 import sk.uniba.fmph.dcs.stone_age.Effect;
-import sk.uniba.fmph.dcs.stone_age.ActionResult;
+import sk.uniba.fmph.dcs.stone_age.boolean;
 import sk.uniba.fmph.dcs.stone_age.InterfaceFigureLocation;
 import sk.uniba.fmph.dcs.stone_age.Player;
 import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
@@ -51,12 +51,12 @@ public class FigureLocationAdaptor implements InterfaceFigureLocation {
 
     // Performs an action for the player using input and output resources
     @Override
-    public ActionResult makeAction(PlayerOrder player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
+    public boolean makeAction(PlayerOrder player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
         Player pl = getPlayerOrder(player);
         if (pl != null) {
             return figureLocation.makeAction(pl, inputResources, outputResources);
         }
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     // Skips the action

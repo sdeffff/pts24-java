@@ -12,68 +12,68 @@ import java.util.Collection;
 
 import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
 import sk.uniba.fmph.dcs.stone_age.Location;
-import sk.uniba.fmph.dcs.stone_age.ActionResult;
+import sk.uniba.fmph.dcs.stone_age.boolean;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 
 import static org.junit.Assert.*;
 
 class StateMock implements InterfaceGamePhaseState {
-    List<ActionResult> expectedActionResults;
+    List<boolean> expectedbooleans;
     List<HasAction> expectedHasAction;
 
     public StateMock() {
-        this.expectedActionResults = new ArrayList<>();
+        this.expectedbooleans = new ArrayList<>();
         this.expectedHasAction = new ArrayList<>();
     }
 
     @Override
-    public ActionResult placeFigures(PlayerOrder player, Location location, int figuresCount) {
-        assert !expectedActionResults.isEmpty();
-        return expectedActionResults.remove(0);
+    public boolean placeFigures(PlayerOrder player, Location location, int figuresCount) {
+        assert !expectedbooleans.isEmpty();
+        return expectedbooleans.remove(0);
     }
 
     @Override
-    public ActionResult makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources,
+    public boolean makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources,
             Collection<Effect> outputResources) {
-        assert !expectedActionResults.isEmpty();
-        return expectedActionResults.remove(0);
+        assert !expectedbooleans.isEmpty();
+        return expectedbooleans.remove(0);
     }
 
     @Override
-    public ActionResult skipAction(PlayerOrder player, Location location) {
-        assert !expectedActionResults.isEmpty();
-        return expectedActionResults.remove(0);
+    public boolean skipAction(PlayerOrder player, Location location) {
+        assert !expectedbooleans.isEmpty();
+        return expectedbooleans.remove(0);
     }
 
     @Override
-    public ActionResult useTools(PlayerOrder player, int toolIndex) {
-        assert !expectedActionResults.isEmpty();
-        return expectedActionResults.remove(0);
+    public boolean useTools(PlayerOrder player, int toolIndex) {
+        assert !expectedbooleans.isEmpty();
+        return expectedbooleans.remove(0);
     }
 
     @Override
-    public ActionResult noMoreToolsThisThrow(PlayerOrder player) {
-        assert !expectedActionResults.isEmpty();
-        return expectedActionResults.remove(0);
+    public boolean noMoreToolsThisThrow(PlayerOrder player) {
+        assert !expectedbooleans.isEmpty();
+        return expectedbooleans.remove(0);
     }
 
     @Override
-    public ActionResult feedTribe(PlayerOrder player, Collection<Effect> resources) {
-        assert !expectedActionResults.isEmpty();
-        return expectedActionResults.remove(0);
+    public boolean feedTribe(PlayerOrder player, Collection<Effect> resources) {
+        assert !expectedbooleans.isEmpty();
+        return expectedbooleans.remove(0);
     }
 
     @Override
-    public ActionResult doNotFeedThisTurn(PlayerOrder player) {
-        assert !expectedActionResults.isEmpty();
-        return expectedActionResults.remove(0);
+    public boolean doNotFeedThisTurn(PlayerOrder player) {
+        assert !expectedbooleans.isEmpty();
+        return expectedbooleans.remove(0);
     }
 
     @Override
-    public ActionResult makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward) {
-        assert !expectedActionResults.isEmpty();
-        return expectedActionResults.remove(0);
+    public boolean makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward) {
+        assert !expectedbooleans.isEmpty();
+        return expectedbooleans.remove(0);
     }
 
     @Override
@@ -138,10 +138,10 @@ public class GamePhaseControllerTest {
                 case 'A' -> mock.expectedHasAction.add(HasAction.AUTOMATIC_ACTION_DONE);
                 case 'N' -> mock.expectedHasAction.add(HasAction.NO_ACTION_POSSIBLE);
                 case 'W' -> mock.expectedHasAction.add(HasAction.WAITING_FOR_PLAYER_ACTION);
-                case 'F' -> mock.expectedActionResults.add(ActionResult.FAILURE);
-                case 'D' -> mock.expectedActionResults.add(ActionResult.ACTION_DONE);
-                case 'R' -> mock.expectedActionResults.add(ActionResult.ACTION_DONE_ALL_PLAYERS_TAKE_A_REWARD);
-                case 'T' -> mock.expectedActionResults.add(ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE);
+                case 'F' -> mock.expectedbooleans.add(boolean.FAILURE);
+                case 'D' -> mock.expectedbooleans.add(boolean.ACTION_DONE);
+                case 'R' -> mock.expectedbooleans.add(boolean.ACTION_DONE_ALL_PLAYERS_TAKE_A_REWARD);
+                case 'T' -> mock.expectedbooleans.add(boolean.ACTION_DONE_WAIT_FOR_TOOL_USE);
                 default -> throw new IllegalStateException("Unexpected value: " + action);
                 }
             }

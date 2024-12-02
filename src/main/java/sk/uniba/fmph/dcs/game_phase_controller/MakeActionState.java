@@ -37,17 +37,17 @@ public class MakeActionState implements InterfaceGamePhaseState {
 
     /**
      * Players cannot place figures during the "Make Action" phase.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param playerOrder   the player attempting to place figures
      * @param location      the location where the player wants to place figures
      * @param figuresCount  the number of figures the player wants to place
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult placeFigures(PlayerOrder playerOrder, Location location, int figuresCount) {
+    public boolean placeFigures(PlayerOrder playerOrder, Location location, int figuresCount) {
         // Players cannot place figures during the 'Make Action' phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**
@@ -58,18 +58,18 @@ public class MakeActionState implements InterfaceGamePhaseState {
      * @param location         the location where the action is to be made
      * @param inputResources   resources provided as input for the action
      * @param outputResources  resources expected as output from the action
-     * @return the result of the action as an {@link ActionResult}
+     * @return the result of the action as an {@link boolean}
      */
     @Override
-    public ActionResult makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources, Collection<Effect> outputResources) {
+    public boolean makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources, Collection<Effect> outputResources) {
         // Check if the player is the current player
         if (!player.equals(currentPlayer)) {
-            return ActionResult.FAILURE;
+            return boolean.FAILURE;
         }
 
         InterfaceFigureLocation figureLocation = places.get(location);
         if (figureLocation == null) {
-            return ActionResult.FAILURE;
+            return boolean.FAILURE;
         }
 
         // Attempt to make the action at the specified location
@@ -82,89 +82,89 @@ public class MakeActionState implements InterfaceGamePhaseState {
      *
      * @param player    the player attempting to skip an action
      * @param location  the location where the action is to be skipped
-     * @return {@code ActionResult.ACTION_DONE} if the action was successfully skipped,
-     *         {@code ActionResult.FAILURE} otherwise
+     * @return {@code boolean.ACTION_DONE} if the action was successfully skipped,
+     *         {@code boolean.FAILURE} otherwise
      */
     @Override
-    public ActionResult skipAction(PlayerOrder player, Location location) {
+    public boolean skipAction(PlayerOrder player, Location location) {
         // Check if the player is the current player
         if (!player.equals(currentPlayer)) {
-            return ActionResult.FAILURE;
+            return boolean.FAILURE;
         }
 
         InterfaceFigureLocation figureLocation = places.get(location);
         if (figureLocation == null) {
-            return ActionResult.FAILURE;
+            return boolean.FAILURE;
         }
 
         boolean success = figureLocation.skipAction(player);
-        return success ? ActionResult.ACTION_DONE : ActionResult.FAILURE;
+        return success ? boolean.ACTION_DONE : boolean.FAILURE;
     }
 
     /**
      * Tool usage is not directly handled in this class during the "Make Action" phase.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param playerOrder  the player attempting to use a tool
      * @param toolIndex    the index of the tool being used
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult useTools(PlayerOrder playerOrder, int toolIndex) {
-        return ActionResult.FAILURE;
+    public boolean useTools(PlayerOrder playerOrder, int toolIndex) {
+        return boolean.FAILURE;
     }
 
     /**
      * Indicating that the player will not use more tools for the current throw.
-     * This method always returns {@link ActionResult#FAILURE} as tool usage is not handled here.
+     * This method always returns {@link boolean#FAILURE} as tool usage is not handled here.
      *
      * @param playerOrder  the player indicating no more tool usage
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult noMoreToolsThisThrow(PlayerOrder playerOrder) {
-        return ActionResult.FAILURE;
+    public boolean noMoreToolsThisThrow(PlayerOrder playerOrder) {
+        return boolean.FAILURE;
     }
 
     /**
      * Feeding the tribe is not handled during the "Make Action" phase.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param playerOrder  the player attempting to feed their tribe
      * @param resources    the resources being used to feed the tribe
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult feedTribe(PlayerOrder playerOrder, Collection<Effect> resources) {
+    public boolean feedTribe(PlayerOrder playerOrder, Collection<Effect> resources) {
         // Feeding the tribe happens during the FeedTribe phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**
      * Indicating that the player chooses not to feed their tribe this turn.
-     * This method always returns {@link ActionResult#FAILURE} as it's not applicable in this phase.
+     * This method always returns {@link boolean#FAILURE} as it's not applicable in this phase.
      *
      * @param playerOrder  the player choosing not to feed their tribe
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult doNotFeedThisTurn(PlayerOrder playerOrder) {
+    public boolean doNotFeedThisTurn(PlayerOrder playerOrder) {
         // Feeding the tribe happens during the FeedTribe phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**
      * Making all players take a reward choice is not applicable during the "Make Action" phase.
-     * This method always returns {@link ActionResult#FAILURE}.
+     * This method always returns {@link boolean#FAILURE}.
      *
      * @param playerOrder  the player attempting to make a reward choice
      * @param reward       the reward being chosen
-     * @return {@code ActionResult.FAILURE} indicating the action is not allowed
+     * @return {@code boolean.FAILURE} indicating the action is not allowed
      */
     @Override
-    public ActionResult makeAllPlayersTakeARewardChoice(PlayerOrder playerOrder, Effect reward) {
+    public boolean makeAllPlayersTakeARewardChoice(PlayerOrder playerOrder, Effect reward) {
         // Not applicable during the 'Make Action' phase
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     /**

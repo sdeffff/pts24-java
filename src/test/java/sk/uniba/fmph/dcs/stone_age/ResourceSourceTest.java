@@ -88,7 +88,7 @@ public class ResourceSourceTest {
         Collection<Effect> output = new ArrayList<>();
         output.add(Effect.WOOD);
         output.add(Effect.WOOD);
-        assertEquals(ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE,
+        assertEquals(boolean.ACTION_DONE_WAIT_FOR_TOOL_USE,
             source.makeAction(mockPlayer1, input, output));
     }
 
@@ -98,7 +98,7 @@ public class ResourceSourceTest {
         Collection<Effect> input = new ArrayList<>();
         Collection<Effect> output = new ArrayList<>();
         output.add(Effect.WOOD);
-        assertEquals(ActionResult.FAILURE,
+        assertEquals(boolean.FAILURE,
             source.makeAction(mockPlayer1, input, output));
     }
 

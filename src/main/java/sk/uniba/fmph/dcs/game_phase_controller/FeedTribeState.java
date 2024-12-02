@@ -1,6 +1,6 @@
 package sk.uniba.fmph.dcs.game_phase_controller;
 
-import sk.uniba.fmph.dcs.stone_age.ActionResult;
+import sk.uniba.fmph.dcs.stone_age.boolean;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
 import sk.uniba.fmph.dcs.stone_age.Location;
@@ -19,50 +19,50 @@ public final class FeedTribeState implements InterfaceGamePhaseState {
     }
 
     @Override
-    public ActionResult placeFigures(final PlayerOrder player, final Location location, final int figuresCount) {
-        return ActionResult.FAILURE;
+    public boolean placeFigures(final PlayerOrder player, final Location location, final int figuresCount) {
+        return boolean.FAILURE;
     }
     @Override
-    public ActionResult makeAction(final PlayerOrder player, final Location location,
+    public boolean makeAction(final PlayerOrder player, final Location location,
                                    final Collection<Effect> inputResources, final Collection<Effect> outputResources) {
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult skipAction(final PlayerOrder player, final Location location) {
-        return ActionResult.FAILURE;
+    public boolean skipAction(final PlayerOrder player, final Location location) {
+        return boolean.FAILURE;
 
     }
 
     @Override
-    public ActionResult useTools(final PlayerOrder player, final int toolIndex) {
-        return ActionResult.FAILURE;
+    public boolean useTools(final PlayerOrder player, final int toolIndex) {
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult noMoreToolsThisThrow(final PlayerOrder player) {
-        return ActionResult.FAILURE;
+    public boolean noMoreToolsThisThrow(final PlayerOrder player) {
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult feedTribe(final PlayerOrder player, final Collection<Effect> resources) {
+    public boolean feedTribe(final PlayerOrder player, final Collection<Effect> resources) {
         if (playerTribes.get(player).feedTribe(resources)) {
-            return ActionResult.ACTION_DONE;
+            return boolean.ACTION_DONE;
         }
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult doNotFeedThisTurn(final PlayerOrder player) {
+    public boolean doNotFeedThisTurn(final PlayerOrder player) {
         if (playerTribes.get(player).doNotFeedThisTurn()) {
-            return ActionResult.ACTION_DONE;
+            return boolean.ACTION_DONE;
         }
-        return ActionResult.FAILURE;
+        return boolean.FAILURE;
     }
 
     @Override
-    public ActionResult makeAllPlayersTakeARewardChoice(final PlayerOrder player, final Effect reward) {
-        return ActionResult.FAILURE;
+    public boolean makeAllPlayersTakeARewardChoice(final PlayerOrder player, final Effect reward) {
+        return boolean.FAILURE;
     }
 
     @Override

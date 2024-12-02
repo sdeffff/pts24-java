@@ -2,7 +2,7 @@ package sk.uniba.fmph.dcs.game_phase_controller;
 
 import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
 import sk.uniba.fmph.dcs.stone_age.Location;
-import sk.uniba.fmph.dcs.stone_age.ActionResult;
+import sk.uniba.fmph.dcs.stone_age.boolean;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.InterfaceGamePhaseController;
@@ -148,8 +148,8 @@ public final class GamePhaseController implements InterfaceGamePhaseController {
                 continue;
             }
 
-            HasAction actionResult = dispatcher.tryToMakeAutomaticAction(player);
-            switch (actionResult) {
+            HasAction boolean = dispatcher.tryToMakeAutomaticAction(player);
+            switch (boolean) {
                 case WAITING_FOR_PLAYER_ACTION:
                     return;
                 case AUTOMATIC_ACTION_DONE:
@@ -174,9 +174,9 @@ public final class GamePhaseController implements InterfaceGamePhaseController {
             return false;
         }
         InterfaceGamePhaseState dispatcher = dispatchers.get(gamePhase);
-        ActionResult actionResult = dispatcher.placeFigures(player, location, figuresCount);
+        boolean boolean = dispatcher.placeFigures(player, location, figuresCount);
 
-        switch (actionResult) {
+        switch (boolean) {
             case FAILURE:
                 return false;
             case ACTION_DONE:
@@ -194,9 +194,9 @@ public final class GamePhaseController implements InterfaceGamePhaseController {
             return false;
         }
         InterfaceGamePhaseState dispatcher = dispatchers.get(gamePhase);
-        ActionResult actionResult = dispatcher.makeAction(player, location, inputResources, outputResources);
+        boolean boolean = dispatcher.makeAction(player, location, inputResources, outputResources);
 
-        switch (actionResult) {
+        switch (boolean) {
             case FAILURE:
                 return false;
             case ACTION_DONE:
@@ -221,9 +221,9 @@ public final class GamePhaseController implements InterfaceGamePhaseController {
             return false;
         }
         InterfaceGamePhaseState dispatcher = dispatchers.get(gamePhase);
-        ActionResult actionResult = dispatcher.skipAction(player, location);
+        boolean boolean = dispatcher.skipAction(player, location);
 
-        switch (actionResult) {
+        switch (boolean) {
             case FAILURE:
                 return false;
             case ACTION_DONE:
@@ -240,9 +240,9 @@ public final class GamePhaseController implements InterfaceGamePhaseController {
             return false;
         }
         InterfaceGamePhaseState dispatcher = dispatchers.get(gamePhase);
-        ActionResult actionResult = dispatcher.useTools(player, toolIndex);
+        boolean boolean = dispatcher.useTools(player, toolIndex);
 
-        switch (actionResult) {
+        switch (boolean) {
             case FAILURE:
                 return false;
             case ACTION_DONE:
@@ -259,9 +259,9 @@ public final class GamePhaseController implements InterfaceGamePhaseController {
             return false;
         }
         InterfaceGamePhaseState dispatcher = dispatchers.get(gamePhase);
-        ActionResult actionResult = dispatcher.noMoreToolsThisThrow(player);
+        boolean boolean = dispatcher.noMoreToolsThisThrow(player);
 
-        switch (actionResult) {
+        switch (boolean) {
             case FAILURE:
                 return false;
             case ACTION_DONE:
@@ -278,9 +278,9 @@ public final class GamePhaseController implements InterfaceGamePhaseController {
             return false;
         }
         InterfaceGamePhaseState dispatcher = dispatchers.get(gamePhase);
-        ActionResult actionResult = dispatcher.feedTribe(player, resources);
+        boolean boolean = dispatcher.feedTribe(player, resources);
 
-        switch (actionResult) {
+        switch (boolean) {
             case FAILURE:
                 return false;
             case ACTION_DONE:
@@ -297,9 +297,9 @@ public final class GamePhaseController implements InterfaceGamePhaseController {
             return false;
         }
         InterfaceGamePhaseState dispatcher = dispatchers.get(gamePhase);
-        ActionResult actionResult = dispatcher.doNotFeedThisTurn(player);
+        boolean boolean = dispatcher.doNotFeedThisTurn(player);
 
-        switch (actionResult) {
+        switch (boolean) {
             case FAILURE:
                 return false;
             case ACTION_DONE:
@@ -316,9 +316,9 @@ public final class GamePhaseController implements InterfaceGamePhaseController {
             return false;
         }
         InterfaceGamePhaseState dispatcher = dispatchers.get(gamePhase);
-        ActionResult actionResult = dispatcher.makeAllPlayersTakeARewardChoice(player, reward);
+        boolean boolean = dispatcher.makeAllPlayersTakeARewardChoice(player, reward);
 
-        switch (actionResult) {
+        switch (boolean) {
             case FAILURE:
                 return false;
             case ACTION_DONE:
