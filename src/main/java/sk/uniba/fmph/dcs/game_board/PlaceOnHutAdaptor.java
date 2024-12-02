@@ -1,6 +1,6 @@
 package sk.uniba.fmph.dcs.game_board;
 
-
+import java.util.Collection;
 import sk.uniba.fmph.dcs.stone_age.ActionResult;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
@@ -14,11 +14,11 @@ public class PlaceOnHutAdaptor implements InterfaceFigureLocationInternal{
 
     @Override
     public HasAction tryToPlaceFigures(Player player, int count) {
-        return ActionResult.FAILURE;
+        return HasAction.NO_ACTION_POSSIBLE;
     }
 
     @Override
-    public ActionResult makeAction(Player player, Effect[] inputResources, Effect[] outputResources) {
+    public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
         return ActionResult.FAILURE;
     }
 
@@ -29,11 +29,16 @@ public class PlaceOnHutAdaptor implements InterfaceFigureLocationInternal{
 
     @Override
     public HasAction tryToMakeAction(Player player) {
-        return ActionResult.FAILURE;
+        return HasAction.NO_ACTION_POSSIBLE;
     }
 
     @Override
     public boolean newTurn() {
         return false;
+    }
+
+    @Override
+    public String state() {
+        return "{}"; // Minimal implementation
     }
 }
