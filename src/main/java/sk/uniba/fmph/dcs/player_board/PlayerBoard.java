@@ -106,7 +106,7 @@ public class PlayerBoard implements InterfaceGetState {
      *
      * @return the updated total number of points
      */
-    public int addPoints(final int points) {
+    public int addPoints(int points) {
         this.points += points;
         return this.points;
     }
