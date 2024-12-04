@@ -5,7 +5,6 @@ import sk.uniba.fmph.dcs.stone_age.EndOfGameEffect;
 import java.util.*;
 
 public class PlayerCivilisationCards {
-
     private Map<EndOfGameEffect, Integer> endOfGameEffects;
     private final EndOfGameEffect[] greenBackGround = {EndOfGameEffect.MEDICINE, EndOfGameEffect.ART,
             EndOfGameEffect.WRITING, EndOfGameEffect.POTTERY, EndOfGameEffect.SUNDIAL, EndOfGameEffect.TRANSPORT,
