@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface InterfacePlayerBoardGameBoard {
     void giveFigure();
+    void giveEffect(Collection<Effect> stuff);
     void giveEndOfGameEffect(Collection<EndOfGameEffect> stuff);
     void giveCard(CivilizationCard card);
     boolean takeResources(Collection<Effect> stuff);

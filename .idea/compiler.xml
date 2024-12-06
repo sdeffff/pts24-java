@@ -6,10 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="STONE_AGE" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="STONE_AGE" target="21" />
-    </bytecodeTargetLevel>
   </component>
 </project>
