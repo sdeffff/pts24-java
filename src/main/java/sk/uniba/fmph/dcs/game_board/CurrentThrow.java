@@ -151,5 +151,3 @@ public class CurrentThrow implements InterfaceToolUse {
         return new JSONObject(state).toString();
     }
 }
-
-

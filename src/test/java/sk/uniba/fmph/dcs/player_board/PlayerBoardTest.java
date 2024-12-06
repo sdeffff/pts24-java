@@ -9,6 +9,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test class for PlayerBoard functionality.
+ */
 public class PlayerBoardTest {
     @Test
     public void testNewTurnBehavior() {
@@ -39,7 +42,7 @@ public class PlayerBoardTest {
         playerBoard.getPlayerTools().useTool(0); // Use 1 tool
         assertFalse(playerBoard.getPlayerTools().hasSufficientTools(1));
 
-        // Simulate new turn
+        //New turn
         playerBoard.newTurn();
         assertFalse(playerBoard.getTribeFedStatus().isTribeFed());
         assertFalse(playerBoard.getPlayerResourcesAndFood().hasResources(List.of(Effect.FOOD)));
@@ -48,6 +51,9 @@ public class PlayerBoardTest {
         assertFalse(playerBoard.getPlayerFigures().hasFigures(7));
     }
 
+    /**
+     * Tests the addition of points to the player's score.
+     */
     @Test
     public void testPointAddition() {
         PlayerBoard playerBoard = new PlayerBoard();
@@ -68,60 +74,64 @@ public class PlayerBoardTest {
         System.out.println(playerBoard.state());
     }
 
+    /**
+     * Tests the calculation and addition of end-game points.
+     */
     @Test
     public void testEndOfGamePointsCalculation() {
         PlayerBoard playerBoard = new PlayerBoard();
 
+        // Setup resources and upgrades
         playerBoard.getPlayerTools().addTool();
         playerBoard.getPlayerTools().addTool();
-        playerBoard.getPlayerTools().addTool(); // 3 tools
+        playerBoard.getPlayerTools().addTool();
 
         int expectedPoints = 0;
 
         for (int i = 0; i < 4; i++) {
             playerBoard.getTribeFedStatus().addField();
             playerBoard.newTurn();
-        } // 4 fields
+        }
 
         playerBoard.addHouse();
-        playerBoard.addHouse(); // 2 houses
+        playerBoard.addHouse();
         playerBoard.getPlayerResourcesAndFood()
                 .giveResources(List.of(new Effect[]{Effect.FOOD, Effect.WOOD, Effect.CLAY, Effect.STONE, Effect.GOLD}));
-        expectedPoints += 4; // Resources
+        expectedPoints += 4;
 
         playerBoard.getPlayerCivilisationCards()
                 .addEndOfGameEffects(new EndOfGameEffect[]{EndOfGameEffect.SHAMAN, EndOfGameEffect.SHAMAN});
-        expectedPoints += 10; // 2 Shamans * 5 figures = 10
+        expectedPoints += 10;
 
         playerBoard.getPlayerCivilisationCards()
                 .addEndOfGameEffects(new EndOfGameEffect[]{EndOfGameEffect.FARMER});
-        expectedPoints += 4; // 1 Farmer * 4 fields = 4
+        expectedPoints += 4;
 
         playerBoard.getPlayerCivilisationCards()
                 .addEndOfGameEffects(new EndOfGameEffect[]{
                         EndOfGameEffect.TOOL_MAKER, EndOfGameEffect.TOOL_MAKER, EndOfGameEffect.TOOL_MAKER,
                         EndOfGameEffect.TOOL_MAKER, EndOfGameEffect.TOOL_MAKER
                 });
-        expectedPoints += 15; // 5 Tool Makers * 3 tools = 15
+        expectedPoints += 15;
 
         playerBoard.getPlayerCivilisationCards()
                 .addEndOfGameEffects(new EndOfGameEffect[]{
                         EndOfGameEffect.BUILDER, EndOfGameEffect.BUILDER, EndOfGameEffect.BUILDER,
                         EndOfGameEffect.BUILDER, EndOfGameEffect.BUILDER, EndOfGameEffect.BUILDER
                 });
-        expectedPoints += 12; // 6 Builders * 2 houses = 12
+        expectedPoints += 12;
 
         playerBoard.getPlayerCivilisationCards()
                 .addEndOfGameEffects(new EndOfGameEffect[]{
                         EndOfGameEffect.WEAVING, EndOfGameEffect.ART, EndOfGameEffect.MEDICINE, EndOfGameEffect.ART
                 });
-        expectedPoints += 10; // 3^2 + 1 = 10
+        expectedPoints += 10;
 
         playerBoard.addEndOfGamePoints();
 
-        int finalPoints = playerBoard.addPoints(-10); // Deduct 10
+        int finalPoints = playerBoard.addPoints(-10);
         expectedPoints -= 10;
-        finalPoints = playerBoard.addPoints(4); // Add 4
+        finalPoints = playerBoard.addPoints(4);
         expectedPoints += 4;
 
         assertEquals(expectedPoints, finalPoints);
