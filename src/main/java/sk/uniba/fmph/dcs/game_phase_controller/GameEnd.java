@@ -4,11 +4,7 @@ import sk.uniba.fmph.dcs.stone_age.*;
 
 import java.util.Collection;
 
-public class AllPlayersTakeARewardState implements InterfaceGamePhaseState{
-
-    InterfaceTakeReward reward;
-
-
+public class GameEnd implements InterfaceGamePhaseState{
     @Override
     public ActionResult placeFigures(PlayerOrder player, Location location, int figuresCount) {
         return ActionResult.FAILURE;
@@ -46,13 +42,11 @@ public class AllPlayersTakeARewardState implements InterfaceGamePhaseState{
 
     @Override
     public ActionResult makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward) {
-        return this.reward.takeReward(player, reward)
-        ? ActionResult.ACTION_DONE
-        : ActionResult.FAILURE;
+        return ActionResult.FAILURE;
     }
 
     @Override
     public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
-        return reward.tryMakeAction(player);
+        return HasAction.WAITING_FOR_PLAYER_ACTION;
     }
 }
