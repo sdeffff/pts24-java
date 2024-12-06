@@ -1,13 +1,29 @@
 package sk.uniba.fmph.dcs.game_board;
 
-import java.util.Optional;
+import java.util.*;
 
 public class CivilizationCardDeck {
-    public Optional<CivilizationCard> getTop() {
-        return Optional.empty(); // Minimal implementation
+    private Stack<CivilizationCard> stack;
+    public CivilizationCardDeck(Stack<CivilizationCard> stack){
+        this.stack = stack;
     }
-    
+
+    public Optional<CivilizationCard> getTop(){
+        if(!stack.isEmpty()){
+            Optional<CivilizationCard> result = Optional.of(stack.pop());
+            return result;
+        }
+        Optional<CivilizationCard> empty = Optional.empty();
+        return empty;
+    }
+
     public String state() {
-        return "{}"; // Minimal implementation
+        List<CivilizationCard> result = new ArrayList<>();
+        while (!stack.isEmpty()) {
+            result.add(stack.pop());
+        }
+        Collections.reverse(result);
+        return result.toString();
+
     }
 }
