@@ -2,137 +2,121 @@ package sk.uniba.fmph.dcs.player_board;
 
 import org.junit.Test;
 import sk.uniba.fmph.dcs.stone_age.Effect;
-import sk.uniba.fmph.dcs.stone_age.EndOfGameEffect;
 import sk.uniba.fmph.dcs.stone_age.TribeFedStatus;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class PlayerBoardTest {
+public class PlayerBoardGameBoardFacadeTest {
+
     @Test
-    public void testNewTurnBehavior() {
-        // Setup: Initialize components
+    public void testDoNotFeedTribeForCurrentTurn() {
         PlayerResourcesAndFood resourcesAndFood = new PlayerResourcesAndFood();
-        PlayerFigures figures = new PlayerFigures();
-        TribeFedStatus tribeStatus = new TribeFedStatus(figures);
-        PlayerCivilisationCards civilisationCards = new PlayerCivilisationCards();
-        PlayerBoard playerBoard = new PlayerBoard(civilisationCards, figures, resourcesAndFood, new PlayerTools(), tribeStatus);
+        PlayerFigures playerFigures = new PlayerFigures();
+        TribeFedStatus tribeStatus = new TribeFedStatus(playerFigures);
+        PlayerBoard playerBoard = new PlayerBoard(
+                new PlayerCivilisationCards(),
+                playerFigures,
+                resourcesAndFood,
+                new PlayerTools(),
+                tribeStatus
+        );
+        PlayerBoardGameBoardFacade facade = new PlayerBoardGameBoardFacade(playerBoard);
 
-        // Add initial resources and upgrades
-        playerBoard.getPlayerFigures().addNewFigure(); // Total figures = 6
-        playerBoard.getTribeFedStatus().addField(); // Add 1 field
-        playerBoard.getPlayerTools().addTool(); // Add 1 tool
-        assertFalse(playerBoard.getTribeFedStatus().isTribeFed());
-
+        // Add resources
         playerBoard.getPlayerResourcesAndFood()
-                .giveResources(List.of(Effect.FOOD, Effect.FOOD, Effect.FOOD));
-
-        boolean fed = playerBoard.getTribeFedStatus().feedTribeIfEnoughFood();
-        assertTrue(fed); // Tribe fed
-        assertEquals(6, playerBoard.getPlayerFigures().getTotalFigures());
-        assertTrue(playerBoard.getPlayerFigures().hasFigures(5));
-        assertFalse(playerBoard.getPlayerFigures().hasFigures(6));
-        assertTrue(playerBoard.getPlayerTools().hasSufficientTools(1));
-        assertFalse(playerBoard.getPlayerTools().hasSufficientTools(2));
-
-        playerBoard.getPlayerTools().useTool(0); // Use 1 tool
-        assertFalse(playerBoard.getPlayerTools().hasSufficientTools(1));
-
-        // Simulate new turn
-        playerBoard.newTurn();
-        assertFalse(playerBoard.getTribeFedStatus().isTribeFed());
-        assertFalse(playerBoard.getPlayerResourcesAndFood().hasResources(List.of(Effect.FOOD)));
-        assertTrue(playerBoard.getPlayerTools().hasSufficientTools(1));
-        assertTrue(playerBoard.getPlayerFigures().hasFigures(6));
-        assertFalse(playerBoard.getPlayerFigures().hasFigures(7));
-    }
-
-    @Test
-    public void testPointAddition() {
-        PlayerBoard playerBoard = new PlayerBoard();
-
-        assertEquals(10, playerBoard.addPoints(10));
-        assertEquals(0, playerBoard.addPoints(-10));
-        assertEquals(7, playerBoard.addPoints(7));
-        assertEquals(17, playerBoard.addPoints(10));
-    }
-
-    @Test
-    public void testHouseAddition() {
-        PlayerBoard playerBoard = new PlayerBoard();
-
-        playerBoard.addHouse();
-        playerBoard.addHouse();
-
-        System.out.println(playerBoard.state());
-    }
-
-    @Test
-    public void testEndOfGamePointsCalculation() {
-        PlayerBoard playerBoard = new PlayerBoard();
-
-        playerBoard.getPlayerTools().addTool();
-        playerBoard.getPlayerTools().addTool();
-        playerBoard.getPlayerTools().addTool(); // 3 tools
-
-        int expectedPoints = 0;
-
-        for (int i = 0; i < 4; i++) {
-            playerBoard.getTribeFedStatus().addField();
-            playerBoard.newTurn();
-        } // 4 fields
-
-        playerBoard.addHouse();
-        playerBoard.addHouse(); // 2 houses
+                .giveResources(List.of(Effect.FOOD, Effect.FOOD, Effect.FOOD, Effect.FOOD, Effect.FOOD));
         playerBoard.getPlayerResourcesAndFood()
-                .giveResources(List.of(new Effect[]{Effect.FOOD, Effect.WOOD, Effect.CLAY, Effect.STONE, Effect.GOLD}));
-        expectedPoints += 4; // Resources
+                .giveResources(List.of(Effect.WOOD, Effect.CLAY, Effect.STONE, Effect.GOLD, Effect.WOOD));
+        Collection<Effect> materials = Arrays.asList(Effect.WOOD, Effect.CLAY, Effect.STONE, Effect.GOLD);
 
-        playerBoard.getPlayerCivilisationCards()
-                .addEndOfGameEffects(new EndOfGameEffect[]{EndOfGameEffect.SHAMAN, EndOfGameEffect.SHAMAN});
-        expectedPoints += 10; // 2 Shamans * 5 figures = 10
+        // Verify: Tribe is initially not starving
+        assertFalse(facade.doNotFeedThisTurn());
 
-        playerBoard.getPlayerCivilisationCards()
-                .addEndOfGameEffects(new EndOfGameEffect[]{EndOfGameEffect.FARMER});
-        expectedPoints += 4; // 1 Farmer * 4 fields = 4
+        // Action: Attempt to feed the tribe
+        facade.feedTribeIfEnoughFood();
 
-        playerBoard.getPlayerCivilisationCards()
-                .addEndOfGameEffects(new EndOfGameEffect[]{
-                        EndOfGameEffect.TOOL_MAKER, EndOfGameEffect.TOOL_MAKER, EndOfGameEffect.TOOL_MAKER,
-                        EndOfGameEffect.TOOL_MAKER, EndOfGameEffect.TOOL_MAKER
-                });
-        expectedPoints += 15; // 5 Tool Makers * 3 tools = 15
+        // Verify: Tribe has been fed
+        assertFalse(facade.doNotFeedThisTurn());
+        assertEquals(0, playerBoard.addPoints(0));
 
-        playerBoard.getPlayerCivilisationCards()
-                .addEndOfGameEffects(new EndOfGameEffect[]{
-                        EndOfGameEffect.BUILDER, EndOfGameEffect.BUILDER, EndOfGameEffect.BUILDER,
-                        EndOfGameEffect.BUILDER, EndOfGameEffect.BUILDER, EndOfGameEffect.BUILDER
-                });
-        expectedPoints += 12; // 6 Builders * 2 houses = 12
+        // Simulate new turn without feeding
+        facade.newTurn();
+        assertFalse(facade.feedTribeIfEnoughFood());
+        assertTrue(facade.doNotFeedThisTurn());
+        assertEquals(-10, playerBoard.addPoints(0));
 
-        playerBoard.getPlayerCivilisationCards()
-                .addEndOfGameEffects(new EndOfGameEffect[]{
-                        EndOfGameEffect.WEAVING, EndOfGameEffect.ART, EndOfGameEffect.MEDICINE, EndOfGameEffect.ART
-                });
-        expectedPoints += 10; // 3^2 + 1 = 10
+        // Another new turn: Tribe is still starving
+        facade.newTurn();
+        assertFalse(facade.feedTribeIfEnoughFood());
+        assertFalse(facade.doNotFeedThisTurn());
+        assertEquals(-10, playerBoard.addPoints(0));
 
-        playerBoard.addEndOfGamePoints();
-
-        int finalPoints = playerBoard.addPoints(-10); // Deduct 10
-        expectedPoints -= 10;
-        finalPoints = playerBoard.addPoints(4); // Add 4
-        expectedPoints += 4;
-
-        assertEquals(expectedPoints, finalPoints);
+        // New turn with attempted manual feeding using materials
+        facade.newTurn();
+        assertFalse(facade.feedTribeIfEnoughFood());
+        assertFalse(facade.feedTribe(materials));
+        assertTrue(facade.doNotFeedThisTurn());
+        assertEquals(-20, playerBoard.addPoints(0));
     }
 
     @Test
-    public void testResetPlayerBoard() {
-        PlayerBoard playerBoard = new PlayerBoard();
+    public void testFeedTribeWithExactFood() {
+        // Setup: Initialize dependencies
+        PlayerResourcesAndFood resourcesAndFood = new PlayerResourcesAndFood();
+        PlayerFigures playerFigures = new PlayerFigures();
+        TribeFedStatus tribeStatus = new TribeFedStatus(playerFigures);
+        PlayerBoard playerBoard = new PlayerBoard(
+                new PlayerCivilisationCards(),
+                playerFigures,
+                resourcesAndFood,
+                new PlayerTools(),
+                tribeStatus
+        );
+        PlayerBoardGameBoardFacade facade = new PlayerBoardGameBoardFacade(playerBoard);
 
-        playerBoard.addHouse();
-        playerBoard.addPoints(20);
-        playerBoard.getPlayerTools().addTool();
+        // Add exact food resources
+        playerBoard.getPlayerResourcesAndFood()
+                .giveResources(List.of(Effect.FOOD, Effect.FOOD, Effect.FOOD, Effect.FOOD));
+
+        // Action: Feed the tribe
+        boolean result = facade.feedTribeIfEnoughFood();
+
+        // Verify: Tribe was fed and points unaffected
+        assertTrue(result);
+        assertFalse(facade.doNotFeedThisTurn());
+        assertEquals(0, playerBoard.addPoints(0));
+    }
+
+    @Test
+    public void testInsufficientResourcesForFeeding() {
+        // Setup: Initialize dependencies
+        PlayerResourcesAndFood resourcesAndFood = new PlayerResourcesAndFood();
+        PlayerFigures playerFigures = new PlayerFigures();
+        TribeFedStatus tribeStatus = new TribeFedStatus(playerFigures);
+        PlayerBoard playerBoard = new PlayerBoard(
+                new PlayerCivilisationCards(),
+                playerFigures,
+                resourcesAndFood,
+                new PlayerTools(),
+                tribeStatus
+        );
+        PlayerBoardGameBoardFacade facade = new PlayerBoardGameBoardFacade(playerBoard);
+
+        // Add insufficient resources (non-food)
+        playerBoard.getPlayerResourcesAndFood()
+                .giveResources(List.of(Effect.WOOD, Effect.CLAY, Effect.STONE));
+
+        // Action: Attempt to feed the tribe
+        boolean result = facade.feedTribeIfEnoughFood();
+
+        // Verify: Tribe could not be fed, resulting in starvation
+        assertFalse(result);
+        assertTrue(facade.doNotFeedThisTurn());
+        assertEquals(-10, playerBoard.addPoints(0));
     }
 }

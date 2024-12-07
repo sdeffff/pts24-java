@@ -7,6 +7,7 @@ import sk.uniba.fmph.dcs.stone_age.InterfaceNewTurn;
 import sk.uniba.fmph.dcs.stone_age.InterfacePlayerBoardGameBoard;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public final class PlayerBoardGameBoardFacade implements InterfaceFeedTribe, InterfaceNewTurn, InterfacePlayerBoardGameBoard {
@@ -43,7 +44,7 @@ public final class PlayerBoardGameBoardFacade implements InterfaceFeedTribe, Int
     @Override
     public boolean feedTribe(final Collection<Effect> resources) {
         Effect[] resourcesArray = resources.toArray(new Effect[0]);
-        return this.playerBoard.getTribeFedStatus().feedTribe(resourcesArray);
+        return this.playerBoard.getTribeFedStatus().feedTribe(List.of(resourcesArray));
     }
 
     /**
@@ -139,11 +140,6 @@ public final class PlayerBoardGameBoardFacade implements InterfaceFeedTribe, Int
     @Override
     public boolean hasFigures(final int count) {
         return this.playerBoard.getPlayerFigures().hasFigures(count);
-    }
-
-    @Override
-    public void addPoints(final int points) {
-        this.playerBoard.addPoints(points);
     }
 
     /**
