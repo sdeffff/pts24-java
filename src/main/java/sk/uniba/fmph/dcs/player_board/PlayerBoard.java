@@ -3,6 +3,12 @@ package sk.uniba.fmph.dcs.player_board;
 import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
 import sk.uniba.fmph.dcs.stone_age.TribeFedStatus;
 
+import org.json.JSONObject;
+import java.util.*;
+
+/**
+ * Represents the player board, managing resources, figures, tools, civilization cards, and game progress.
+ */
 public class PlayerBoard implements InterfaceGetState {
     private int points;
     private int houses;
@@ -14,6 +20,15 @@ public class PlayerBoard implements InterfaceGetState {
 
     private boolean endOfGamePointsAdded;
 
+    /**
+     * Creates a PlayerBoard with the specified components.
+     *
+     * @param pcc The player's civilization cards.
+     * @param pf  The player's figures.
+     * @param prf The player's resources and food.
+     * @param pt  The player's tools.
+     * @param tfs The player's tribe fed status.
+     */
     public PlayerBoard(final PlayerCivilisationCards pcc, final PlayerFigures pf, final PlayerResourcesAndFood prf,
                        final PlayerTools pt, final TribeFedStatus tfs) {
         this.playerCivilisationCards = pcc;
@@ -27,6 +42,9 @@ public class PlayerBoard implements InterfaceGetState {
         this.endOfGamePointsAdded = false;
     }
 
+    /**
+     * Creates a PlayerBoard with default components.
+     */
     public PlayerBoard() {
         this.playerResourcesAndFood = new PlayerResourcesAndFood();
         this.playerFigures = new PlayerFigures();
@@ -36,16 +54,12 @@ public class PlayerBoard implements InterfaceGetState {
 
         this.points = 0;
         this.houses = 0;
-
         this.endOfGamePointsAdded = false;
     }
 
     /**
-     * Initiates the start of a new turn for the player.
-     * <p>
-     * This method updates various components of the player board to reflect the start of a new turn: - Resets the
-     * tribe's fed status and provides food based on fields. - Resets the number of available player figures. - Resets
-     * the status of the player's tools to unused.
+     * Prepares the player board for a new turn.
+     * Resets tribe feeding status, available figures, and tool usage.
      */
     public void newTurn() {
         this.tribeFedStatus.newTurn();
@@ -54,57 +68,55 @@ public class PlayerBoard implements InterfaceGetState {
     }
 
     /**
-     * Retrieves the current resources and food status for the player.
+     * Gets the player's resources and food.
      *
-     * @return the PlayerResourcesAndFood object containing the player's resources and food.
+     * @return The {@code PlayerResourcesAndFood} object.
      */
     public PlayerResourcesAndFood getPlayerResourcesAndFood() {
         return this.playerResourcesAndFood;
     }
 
     /**
-     * Retrieves the current figures status for the player.
+     * Gets the player's figures.
      *
-     * @return the PlayerFigures object containing the player's figures status.
+     * @return The {@code PlayerFigures} object.
      */
     public PlayerFigures getPlayerFigures() {
         return this.playerFigures;
     }
 
     /**
-     * Retrieves the current tools status for the player.
+     * Gets the player's tools.
      *
-     * @return the PlayerTools object containing the player's tools status.
+     * @return The {@code PlayerTools} object.
      */
     public PlayerTools getPlayerTools() {
         return this.playerTools;
     }
 
     /**
-     * Retrieves the current civilization cards for the player.
+     * Gets the player's civilization cards.
      *
-     * @return the PlayerCivilisationCards object containing the player's civilization cards.
+     * @return The {@code PlayerCivilisationCards} object.
      */
     public PlayerCivilisationCards getPlayerCivilisationCards() {
         return this.playerCivilisationCards;
     }
 
     /**
-     * Retrieves the current fed status of the tribe.
+     * Gets the player's tribe feeding status.
      *
-     * @return the TribeFedStatus object representing the current fed status of the tribe.
+     * @return The {@code TribeFedStatus} object.
      */
     public TribeFedStatus getTribeFedStatus() {
         return this.tribeFedStatus;
     }
 
     /**
-     * Adds the specified number of points to the player's total points.
+     * Adds points to the player's total score.
      *
-     * @param points
-     *            the number of points to add
-     *
-     * @return the updated total number of points
+     * @param points The number of points to add (can be negative).
+     * @return The updated total score.
      */
     public int addPoints(final int points) {
         this.points += points;
@@ -112,38 +124,47 @@ public class PlayerBoard implements InterfaceGetState {
     }
 
     /**
-     * Increments the count of houses owned by the player.
+     * Increases the count of houses owned by the player by one.
      */
     public void addHouse() {
         this.houses++;
     }
 
     /**
-     * Adds the final game points to the player's total score based on various game components such as civilization
-     * cards, tools, fields, figures, and resources.
+     * Adds end-of-game points to the player's score based on game components.
+     * Points are calculated from civilization cards, tools, fields, figures, and resources.
+     * Ensures this operation is performed only once.
      */
     public void addEndOfGamePoints() {
         if (this.endOfGamePointsAdded) {
             return;
         }
-        this.points += this.playerCivilisationCards.calculateEndOfGameCivilisationCardsPoints(this.houses,
-                this.playerTools.getTools(), this.tribeFedStatus.getFields(),
-                this.playerFigures.getTotalFigures());
+        this.points += this.playerCivilisationCards.calculateEndOfGameCivilisationCardsPoints(
+                this.houses,
+                this.playerTools.getTools(),
+                this.tribeFedStatus.getFields(),
+                this.playerFigures.getTotalFigures()
+        );
         this.points += this.playerResourcesAndFood.numberOfResourcesForFinalPoints();
-
         this.endOfGamePointsAdded = true;
     }
 
     /**
-     * Retrieves the current state of the player board, including points, houses, resources, figures, tools,
-     * civilization cards, and tribe fed status.
+     * Gets a structured summary of the player's board state.
      *
-     * @return a string representing the current state of the player board
+     * @return A string representation of the player board's current state.
      */
     @Override
     public String state() {
-        return "Points: " + this.points + ", houses: " + this.houses + "\n" + this.playerResourcesAndFood.state() + "\n"
-                + this.playerFigures.state() + "\n" + this.playerTools.state() + "\n"
-                + this.playerCivilisationCards.state() + "\n" + this.tribeFedStatus.state();
+        Map<String, Object> state = Map.of(
+                "points", this.points,
+                "houses", this.houses,
+                "resourcesAndFood", this.playerResourcesAndFood.state(),
+                "figures", this.playerFigures.state(),
+                "tools", this.playerTools.state(),
+                "civilizationCards", this.playerCivilisationCards.state(),
+                "tribeFeedingStatus", this.tribeFedStatus.state()
+        );
+        return new JSONObject(state).toString();
     }
 }
