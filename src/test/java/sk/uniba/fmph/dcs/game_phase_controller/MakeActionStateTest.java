@@ -1,18 +1,17 @@
 package sk.uniba.fmph.dcs.game_phase_controller;
 
-import junit.framework.TestCase;
-
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import sk.uniba.fmph.dcs.stone_age.*;
+import sk.uniba.fmph.dcs.game_board.Player;
 
 import java.util.*;
 
 public class MakeActionStateTest {
     static class FigureLocationMock implements InterfaceFigureLocation {
-        private ActionResult makeAction;
-        private boolean skipAction;
-        private HasAction tryToMakeAction;
+        private final ActionResult makeAction;
+        private final boolean skipAction;
+        private final HasAction tryToMakeAction;
 
         FigureLocationMock(final ActionResult makeAction, final boolean skipAction, final HasAction tryToMakeAction) {
             this.makeAction = makeAction;

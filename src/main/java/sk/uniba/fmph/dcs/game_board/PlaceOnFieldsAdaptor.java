@@ -4,7 +4,6 @@ import java.util.Collection;
 import sk.uniba.fmph.dcs.stone_age.ActionResult;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
-import sk.uniba.fmph.dcs.stone_age.Player;
 
 public class PlaceOnFieldsAdaptor implements InterfaceFigureLocationInternal {
     private ToolMakerHutFields toolMakerHutFields;

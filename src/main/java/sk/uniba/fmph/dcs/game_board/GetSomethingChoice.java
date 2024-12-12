@@ -1,7 +1,6 @@
 package sk.uniba.fmph.dcs.game_board;
 
 import sk.uniba.fmph.dcs.stone_age.Effect;
-import sk.uniba.fmph.dcs.stone_age.Player;
 import java.util.List;
 import java.util.ArrayList;
 

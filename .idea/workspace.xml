@@ -5,18 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6f0b158-5064-4651-98e6-e56cdb854849" name="Changes" comment="First implementation of FeedTribeState">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/CivilizationCardDeck.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/CivilizationCardPlace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/AllPlayersTakeReward.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/GameBoardFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/GetSomethingFixed.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/Player.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/RewardMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/stone_age/InterfaceStoneAgeGame.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/game_board/CurrentThrowTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/FigureLocationAdaptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/FigureLocationAdaptor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/STONE_AGE.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/BuildingTile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/BuildingTile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/CurrentThrow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/CurrentThrow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/EvaluateCivilizationCardImmediateEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/EvaluateCivilizationCardImmediateEffect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/GameBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/GameBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/GetCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/GetCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/GetSomethingChoice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/GetSomethingChoice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/GetSomethingThrow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/GetSomethingThrow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/InterfaceFigureLocationInternal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/InterfaceFigureLocationInternal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/PlaceOnFieldsAdaptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/PlaceOnFieldsAdaptor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/PlaceOnHutAdaptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/PlaceOnHutAdaptor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/PlaceOnToolMakerAdaptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/PlaceOnToolMakerAdaptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/player_board/PlayerTools.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/player_board/PlayerTools.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/stone_age/InterfaceFigureLocationInternal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/stone_age/InterfaceFigureLocationInternal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/stone_age/TribeFedStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/stone_age/TribeFedStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/ResourceSource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/ResourceSource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/ToolMakerHutFields.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_board/ToolMakerHutFields.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_phase_controller/MakeActionState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/game_phase_controller/MakeActionState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/stone_age/StoneAgeGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/uniba/fmph/dcs/stone_age/StoneAgeGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/game_board/CivilizationCardPlaceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/game_board/CivilizationCardPlaceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/game_phase_controller/MakeActionStateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/game_phase_controller/MakeActionStateTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/player_board/PlayerCivilizationCardsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/player_board/PlayerCivilizationCardsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/player_board/PlayerToolsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/player_board/PlayerToolsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/stone_age/ResourceSourceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/stone_age/ResourceSourceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +44,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
+        <option value="JUnit3 Test Class" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -44,6 +65,10 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -55,23 +80,48 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "JUnit.CivilizationCardPlaceTest.executor": "Run",
+    "JUnit.CurrentThrowTest.executor": "Run",
+    "JUnit.CurrentThrowTest.testCanUseTools.executor": "Run",
+    "JUnit.CurrentThrowTest.testCannotUseTools.executor": "Run",
+    "JUnit.CurrentThrowTest.testInitiateWithUsingTools.executor": "Run",
+    "JUnit.CurrentThrowTest.testInitiateWithoutUsingTools.executor": "Run",
+    "JUnit.CurrentThrowTest.testStateOutput.executor": "Run",
     "JUnit.MakeActionStateTest.executor": "Run",
+    "JUnit.ResourceSourceTest.executor": "Run",
+    "JUnit.ResourceSourceTest.testNewTurnClearsFigures.executor": "Run",
     "JUnit.TribeFedStatusTest.executor": "Run",
     "JUnit.stone_age in STONE_AGE.executor": "Debug",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging Anatolii-Izotov",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit3",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3": "junit.framework.TestCase",
+    "git-widget-placeholder": "Anatolii-Izotov",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/Vlad/java/PTS_project/pts24-java",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15546875",
+    "project.structure.side.proportion": "0.30925927",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.MakeActionStateTest">
-    <configuration name="CivilizationCardPlaceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="sk.uniba.fmph.dcs.game_board" />
+      <recent name="sk.uniba.fmph.dcs.stone_age" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="junit.framework.TestCase" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="sk.uniba.fmph.dcs.game_board" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.CurrentThrowTest.testStateOutput">
+    <configuration name="CurrentThrowTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="STONE_AGE" />
       <extension name="coverage">
         <pattern>
@@ -80,46 +130,72 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="sk.uniba.fmph.dcs.game_board" />
-      <option name="MAIN_CLASS_NAME" value="sk.uniba.fmph.dcs.game_board.CivilizationCardPlaceTest" />
+      <option name="MAIN_CLASS_NAME" value="sk.uniba.fmph.dcs.game_board.CurrentThrowTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MakeActionStateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CurrentThrowTest.testCanUseTools" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="STONE_AGE" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sk.uniba.fmph.dcs.game_phase_controller.*" />
+          <option name="PATTERN" value="sk.uniba.fmph.dcs.game_board.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="sk.uniba.fmph.dcs.game_phase_controller" />
-      <option name="MAIN_CLASS_NAME" value="sk.uniba.fmph.dcs.game_phase_controller.MakeActionStateTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="PACKAGE_NAME" value="sk.uniba.fmph.dcs.game_board" />
+      <option name="MAIN_CLASS_NAME" value="sk.uniba.fmph.dcs.game_board.CurrentThrowTest" />
+      <option name="METHOD_NAME" value="testCanUseTools" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TribeFedStatusTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CurrentThrowTest.testCannotUseTools" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="STONE_AGE" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sk.uniba.fmph.dcs.stone_age.*" />
+          <option name="PATTERN" value="sk.uniba.fmph.dcs.game_board.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="sk.uniba.fmph.dcs.stone_age" />
-      <option name="MAIN_CLASS_NAME" value="sk.uniba.fmph.dcs.stone_age.TribeFedStatusTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="PACKAGE_NAME" value="sk.uniba.fmph.dcs.game_board" />
+      <option name="MAIN_CLASS_NAME" value="sk.uniba.fmph.dcs.game_board.CurrentThrowTest" />
+      <option name="METHOD_NAME" value="testCannotUseTools" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="stone_age in STONE_AGE" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CurrentThrowTest.testInitiateWithUsingTools" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="STONE_AGE" />
-      <option name="TEST_OBJECT" value="directory" />
-      <dir value="$PROJECT_DIR$/src/test/java/sk/uniba/fmph/dcs/stone_age" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sk.uniba.fmph.dcs.game_board.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sk.uniba.fmph.dcs.game_board" />
+      <option name="MAIN_CLASS_NAME" value="sk.uniba.fmph.dcs.game_board.CurrentThrowTest" />
+      <option name="METHOD_NAME" value="testInitiateWithUsingTools" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CurrentThrowTest.testStateOutput" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="STONE_AGE" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sk.uniba.fmph.dcs.game_board.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sk.uniba.fmph.dcs.game_board" />
+      <option name="MAIN_CLASS_NAME" value="sk.uniba.fmph.dcs.game_board.CurrentThrowTest" />
+      <option name="METHOD_NAME" value="testStateOutput" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -139,11 +215,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.TribeFedStatusTest" />
-        <item itemvalue="JUnit.stone_age in STONE_AGE" />
-        <item itemvalue="JUnit.MakeActionStateTest" />
-        <item itemvalue="JUnit.CivilizationCardPlaceTest" />
-        <item itemvalue="JUnit.MakeActionStateTest" />
+        <item itemvalue="JUnit.CurrentThrowTest.testStateOutput" />
+        <item itemvalue="JUnit.CurrentThrowTest.testCannotUseTools" />
+        <item itemvalue="JUnit.CurrentThrowTest.testCanUseTools" />
+        <item itemvalue="JUnit.CurrentThrowTest.testInitiateWithUsingTools" />
+        <item itemvalue="JUnit.CurrentThrowTest" />
       </list>
     </recent_temporary>
   </component>
@@ -156,6 +232,7 @@
       <option name="presentableId" value="Default" />
       <updated>1730900339117</updated>
       <workItem from="1733161208736" duration="951000" />
+      <workItem from="1734001604003" duration="4868000" />
     </task>
     <task id="LOCAL-00001" summary="First implementation of FeedTribeState">
       <option name="closed" value="true" />

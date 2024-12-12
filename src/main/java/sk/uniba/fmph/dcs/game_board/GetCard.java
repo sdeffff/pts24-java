@@ -1,11 +1,11 @@
 package sk.uniba.fmph.dcs.game_board;
 
 import sk.uniba.fmph.dcs.stone_age.Effect;
-import sk.uniba.fmph.dcs.stone_age.Player;
+import sk.uniba.fmph.dcs.game_board.Player;
 
 import java.util.Optional;
 
-public class GetCard implements  EvaluateCivilizationCardImmediateEffect {
+public class GetCard implements EvaluateCivilizationCardImmediateEffect {
     private CivilizationCardDeck deck;
 
     public GetCard(CivilizationCardDeck deck) {
@@ -22,6 +22,5 @@ public class GetCard implements  EvaluateCivilizationCardImmediateEffect {
             return true;
         }
         return false;
-
     }
 }

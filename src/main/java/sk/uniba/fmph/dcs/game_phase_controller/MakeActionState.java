@@ -20,19 +20,12 @@ public class MakeActionState implements InterfaceGamePhaseState {
     private final Map<Location, InterfaceFigureLocation> places;
 
     /**
-     * The player who is currently taking their turn during the "Make Action" phase.
-     */
-    private final PlayerOrder currentPlayer;
-
-    /**
      * Constructs a new {@code MakeActionState} with the specified places and current player.
      *
      * @param places         a map of locations to their corresponding figure locations
-     * @param currentPlayer  the player who is currently taking their turn
      */
-    public MakeActionState(Map<Location, InterfaceFigureLocation> places, PlayerOrder currentPlayer) {
+    public MakeActionState(Map<Location, InterfaceFigureLocation> places) {
         this.places = places;
-        this.currentPlayer = currentPlayer;
     }
 
     /**
@@ -62,10 +55,6 @@ public class MakeActionState implements InterfaceGamePhaseState {
      */
     @Override
     public ActionResult makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources, Collection<Effect> outputResources) {
-        // Check if the player is the current player
-        if (!player.equals(currentPlayer)) {
-            return ActionResult.FAILURE;
-        }
 
         InterfaceFigureLocation figureLocation = places.get(location);
         if (figureLocation == null) {
@@ -87,10 +76,6 @@ public class MakeActionState implements InterfaceGamePhaseState {
      */
     @Override
     public ActionResult skipAction(PlayerOrder player, Location location) {
-        // Check if the player is the current player
-        if (!player.equals(currentPlayer)) {
-            return ActionResult.FAILURE;
-        }
 
         InterfaceFigureLocation figureLocation = places.get(location);
         if (figureLocation == null) {
@@ -178,9 +163,6 @@ public class MakeActionState implements InterfaceGamePhaseState {
      */
     @Override
     public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
-        if (!player.equals(currentPlayer)) {
-            return HasAction.NO_ACTION_POSSIBLE;
-        }
 
         boolean hasWaitingActions = false;
 
