@@ -141,7 +141,7 @@ public class PlayerBoard implements InterfaceGetState {
         }
         this.points += this.playerCivilisationCards.calculateEndOfGameCivilisationCardsPoints(
                 this.houses,
-                this.playerTools.getTools(),
+                this.playerTools.getTools().length,
                 this.tribeFedStatus.getFields(),
                 this.playerFigures.getTotalFigures()
         );

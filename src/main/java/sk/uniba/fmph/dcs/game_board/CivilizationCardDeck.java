@@ -24,6 +24,5 @@ public class CivilizationCardDeck {
         }
         Collections.reverse(result);
         return result.toString();
-
     }
 }

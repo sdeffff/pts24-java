@@ -14,5 +14,5 @@ public interface InterfacePlayerBoardGameBoard {
     boolean takeFigures(int count);
     boolean hasFigures(int count);
     boolean hasSufficientTools(int goal);
-    Optional<Integer> useTool(int idx);
+    Optional<Optional<Integer>> useTool(int idx);
 }

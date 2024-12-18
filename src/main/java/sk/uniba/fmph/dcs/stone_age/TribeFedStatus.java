@@ -88,6 +88,11 @@ public final class TribeFedStatus implements InterfaceFeedTribe, InterfaceNewTur
         return false;
     }
 
+    @Override
+    public void giveEffect(Effect[] effects) {
+
+    }
+
     public void addField() {
         if (fields < MAX_FIELDS) {
             fields++;

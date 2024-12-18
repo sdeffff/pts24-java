@@ -2,9 +2,8 @@ package sk.uniba.fmph.dcs.player_board;
 
 import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import org.json.JSONObject;
 
 public class PlayerTools implements InterfaceGetState {
     private final int[] tools;
@@ -26,10 +25,6 @@ public class PlayerTools implements InterfaceGetState {
         roundToolsCount = totalToolsCount;
     }
 
-    public int getTools() {
-        return this.totalToolsCount;
-    }
-
     public void addTool(){
         if(totalToolsCount < 12) {
             totalToolsCount++;
@@ -40,14 +35,13 @@ public class PlayerTools implements InterfaceGetState {
     }
 
     public void addSingleUseTool(int strength) {
-        for(int i = maxMultiplyUseTools - 1; i < tools.length; i++){
-            if(tools[i] == -1){
+        for (int i = maxMultiplyUseTools - 1; i < tools.length; i++) {
+            if (tools[i] == -1) {
                 tools[i] = strength;
                 break;
             }
         }
-
-
+    }
 
         public Optional<Integer> useTool(int index) {
             Optional<Integer> toReturn = Optional.empty();

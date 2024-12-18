@@ -1,15 +1,8 @@
 package sk.uniba.fmph.dcs.game_board;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import org.json.JSONObject;
-<<<<<<< HEAD:src/main/java/sk/uniba/fmph/dcs/stone_age/ResourceSource.java
-import sk.uniba.fmph.dcs.game_board.Player;
-=======
 import sk.uniba.fmph.dcs.stone_age.*;
->>>>>>> main:src/main/java/sk/uniba/fmph/dcs/game_board/ResourceSource.java
 
 import java.util.Map;
 

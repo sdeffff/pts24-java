@@ -53,7 +53,7 @@ public class GetSomethingThrowTest {
         }
 
         @Override
-        public Optional<Integer> useTool(int idx) {
+        public Optional<Optional<Integer>> useTool(int idx) {
             return Optional.empty();
         }
     }

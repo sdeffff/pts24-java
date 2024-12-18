@@ -3,7 +3,6 @@ package sk.uniba.fmph.dcs.game_board;
 import org.junit.Test;
 import sk.uniba.fmph.dcs.stone_age.*;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -55,7 +54,7 @@ public class GetSomethingFixedTest {
         }
 
         @Override
-        public Optional<Integer> useTool(int idx) {
+        public Optional<Optional<Integer>> useTool(int idx) {
             return Optional.empty();
         }
     }
