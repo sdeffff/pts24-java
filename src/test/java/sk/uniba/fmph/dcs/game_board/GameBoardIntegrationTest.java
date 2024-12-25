@@ -91,6 +91,44 @@ public class GameBoardIntegrationTest {
         assertTrue(finalState.contains("figures"));
     }
     
+    @Test 
+    public void testCivilizationCardFlow() {
+        // Test with specific civilization card
+        CivilizationCard testCard = new CivilizationCard(
+            Arrays.asList(ImmediateEffect.FOOD),
+            Arrays.asList(EndOfGameEffect.FARMER)
+        );
+        
+        GameBoard gameBoard = GameBoardFactory.createGameBoard(
+            players,
+            mockThrow,
+            Arrays.asList(testCard),
+            testBuildings
+        );
+
+        // Place figure on civilization card spot
+        assertTrue(gameBoard.placeFigures(
+            players.get(0).playerOrder(),
+            Location.CIVILIZATION_CARD,
+            1
+        ));
+
+        // Make action to get card
+        assertEquals(
+            ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE,
+            gameBoard.makeAction(
+                players.get(0).playerOrder(),
+                Location.CIVILIZATION_CARD,
+                new ArrayList<>(),
+                Arrays.asList(Effect.FOOD)
+            )
+        );
+
+        // Verify card was given through PlayerBoard mock
+        assertEquals(1, playerBoardMock.getCards().size());
+        assertEquals(testCard, playerBoardMock.getCards().get(0));
+    }
+
     @Test
     public void testCompleteRoundFlow() {
         GameBoard gameBoard = GameBoardFactory.createGameBoard(
