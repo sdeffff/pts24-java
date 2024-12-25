@@ -19,7 +19,7 @@ public class GameBoardFactory {
         return new GameBoard(
             players,
             orderedBuildings.toArray(new Building[0]),
-            orderedCards.toArray(new CivilizationCard[0]),
+            civilizationCards.toArray(new CivilizationCard[0]),
             currentThrow
         );
     }

@@ -15,26 +15,21 @@ import java.util.*;
  */
 public class CurrentThrow implements InterfaceToolUse, CurrentThrowInterface {
 
-    private Effect throwsFor;
-    private int throwResult;
     private final ThrowInterface throw_;
-    private static CurrentThrow instance;
-    
-    public CurrentThrow(ThrowInterface throw_) {
-        this.throw_ = throw_;
-    }
-    
-    public static CurrentThrow getInstance() {
-        if (instance == null) {
-            instance = new CurrentThrow(Throw.getInstance());
-        }
-        return instance;
-    }
-    private Player player;
-    private int dices;
-    private int[] dicesResults;
+    private Effect throwsFor = null;
+    private int throwResult = 0;
+    private Player player = null;
+    private int dices = 0;
+    private int[] dicesResults = new int[0];
     private boolean toolsUsed = false;
     private boolean finished = false;
+
+    public CurrentThrow(ThrowInterface throw_) {
+        if (throw_ == null) {
+            throw new IllegalArgumentException("ThrowInterface cannot be null");
+        }
+        this.throw_ = throw_;
+    }
 
     /**
      * Initializes a new dice throw for a player, specifying the target effect and number of dice to roll.

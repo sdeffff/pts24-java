@@ -1,3 +1,5 @@
+package sk.uniba.fmph.dcs.game_board;
+
 import java.util.*;
 
 public class CivilizationCardDeckFactory {
@@ -32,3 +34,23 @@ public class CivilizationCardDeckFactory {
         return new CivilizationCardDeck(new Stack<>());
     }
 }
+    public static CivilizationCardDeck createProductionDeck(List<CivilizationCard> cards) {
+        Stack<CivilizationCard> stack = new Stack<>();
+        List<CivilizationCard> shuffledCards = new ArrayList<>(cards);
+        Collections.shuffle(shuffledCards);
+        stack.addAll(shuffledCards);
+        return new CivilizationCardDeck(stack);
+    }
+    
+    public static CivilizationCardDeck createTestDeck(List<CivilizationCard> orderedCards) {
+        Stack<CivilizationCard> stack = new Stack<>();
+        // Add in reverse order so they come out in the specified order
+        for (int i = orderedCards.size() - 1; i >= 0; i--) {
+            stack.push(orderedCards.get(i));
+        }
+        return new CivilizationCardDeck(stack);
+    }
+    
+    public static CivilizationCardDeck createEmptyDeck() {
+        return new CivilizationCardDeck(new Stack<>());
+    }

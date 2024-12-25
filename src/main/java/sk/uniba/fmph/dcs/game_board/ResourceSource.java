@@ -21,6 +21,12 @@ public final class ResourceSource implements InterfaceFigureLocationInternal {
         if (!resource.isResourceOrFood()) {
             throw new IllegalArgumentException("Resource must be food or resource");
         }
+        if (currentThrow == null) {
+            throw new IllegalArgumentException("CurrentThrow interface cannot be null");
+        }
+        if (maxFigures <= 0 || maxFigureColors <= 0) {
+            throw new IllegalArgumentException("Max figures and colors must be positive");
+        }
         this.name = name;
         this.resource = resource;
         this.maxFigures = maxFigures;
