@@ -3,7 +3,7 @@ package sk.uniba.fmph.dcs.game_board;
 import sk.uniba.fmph.dcs.stone_age.*;
 import java.util.*;
 
-public class PlayerBoardMock implements InterfacePlayerBoardMock {
+public class PlayerBoardMock implements InterfacePlayerBoardMock, InterfacePlayerBoardGameBoard {
     private int figureCount = 5;
     private List<CivilizationCard> cards = new ArrayList<>();
     private List<Effect> effects = new ArrayList<>();

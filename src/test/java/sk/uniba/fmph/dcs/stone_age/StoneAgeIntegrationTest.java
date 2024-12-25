@@ -31,10 +31,18 @@ public class StoneAgeIntegrationTest {
     public void setUp() {
         // Setup mock throw with controlled results
         mockThrow = new ThrowInterface() {
-            private int[] nextRolls = {3, 3, 3};
+            private Queue<int[]> rollSequence = new LinkedList<>();
+            
+            public void setNextRolls(int[] rolls) {
+                rollSequence.add(rolls);
+            }
             
             @Override
             public int[] throw_(int dices) {
+                int[] nextRolls = rollSequence.poll();
+                if (nextRolls == null) {
+                    nextRolls = new int[]{3, 3, 3}; // Default rolls
+                }
                 return Arrays.copyOf(nextRolls, dices);
             }
         };

@@ -10,11 +10,35 @@ public class GameBoardFactory {
             List<CivilizationCard> civilizationCards,
             List<Building> buildings) {
         
-        // Create board with controlled random elements
+        CurrentThrowInterface currentThrow = new CurrentThrow(throwImpl);
+        
+        // Ensure lists are mutable copies for safety
+        List<CivilizationCard> orderedCards = new ArrayList<>(civilizationCards);
+        List<Building> orderedBuildings = new ArrayList<>(buildings);
+        
         return new GameBoard(
             players,
-            buildings.toArray(new Building[0]),
-            civilizationCards.toArray(new CivilizationCard[0])
+            orderedBuildings.toArray(new Building[0]),
+            orderedCards.toArray(new CivilizationCard[0]),
+            currentThrow
+        );
+    }
+
+    public static GameBoard createTestGameBoard(
+            List<Player> players,
+            ThrowInterface throwImpl,
+            List<CivilizationCard> orderedCards,
+            List<Building> orderedBuildings,
+            boolean skipShuffle) {
+        
+        CurrentThrowInterface currentThrow = new CurrentThrow(throwImpl);
+        
+        // Use cards and buildings in specified order for testing
+        return new GameBoard(
+            players,
+            orderedBuildings.toArray(new Building[0]),
+            orderedCards.toArray(new CivilizationCard[0]),
+            currentThrow
         );
     }
 
