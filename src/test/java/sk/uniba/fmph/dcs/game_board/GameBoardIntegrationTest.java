@@ -49,6 +49,9 @@ public class GameBoardIntegrationTest {
     
     @Test
     public void testGameBoardIntegration() {
+        // Configure mock throw for specific results
+        ((ThrowInterface)mockThrow).setNextRolls(new int[]{4, 4}); // Ensure predictable resource gathering
+        
         GameBoard gameBoard = GameBoardFactory.createGameBoard(
             players,
             mockThrow,
@@ -56,14 +59,19 @@ public class GameBoardIntegrationTest {
             testBuildings
         );
         
-        // Test placing figures
+        // Test placing figures through interface
         assertTrue(gameBoard.placeFigures(
             players.get(0).playerOrder(),
             Location.HUNTING_GROUNDS,
             2
         ));
         
-        // Test making action
+        // Verify figure placement through state
+        String placementState = gameBoard.state();
+        assertTrue(placementState.contains("HUNTING_GROUNDS"));
+        assertTrue(placementState.contains("\"figures\":[2]"));
+        
+        // Test resource gathering with controlled dice rolls
         assertEquals(
             ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE,
             gameBoard.makeAction(
@@ -74,10 +82,13 @@ public class GameBoardIntegrationTest {
             )
         );
         
-        // Verify state through interfaces
-        String state = gameBoard.state();
-        assertTrue(state.contains("HUNTING_GROUNDS"));
-        assertTrue(state.contains("figures"));
+        // Verify resources were given through PlayerBoard mock
+        assertTrue(playerBoardMock.getEffects().containsAll(Arrays.asList(Effect.FOOD, Effect.FOOD)));
+        
+        // Verify final state
+        String finalState = gameBoard.state();
+        assertTrue(finalState.contains("HUNTING_GROUNDS"));
+        assertTrue(finalState.contains("figures"));
     }
     
     @Test
