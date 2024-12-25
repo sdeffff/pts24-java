@@ -17,7 +17,19 @@ public class CurrentThrow implements InterfaceToolUse {
 
     private Effect throwsFor;
     private int throwResult;
-    private Throw throw_ = new Throw();
+    private final ThrowInterface throw_;
+    private static CurrentThrow instance;
+    
+    public CurrentThrow(ThrowInterface throw_) {
+        this.throw_ = throw_;
+    }
+    
+    public static CurrentThrow getInstance() {
+        if (instance == null) {
+            instance = new CurrentThrow(Throw.getInstance());
+        }
+        return instance;
+    }
     private Player player;
     private int dices;
     private int[] dicesResults;

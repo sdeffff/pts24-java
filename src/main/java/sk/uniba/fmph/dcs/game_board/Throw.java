@@ -2,10 +2,20 @@ package sk.uniba.fmph.dcs.game_board;
 
 import java.util.Random;
 
-public class Throw {
+public class Throw implements ThrowInterface {
 
-    // I can't use the method name "throw" because it causes a syntax error.
-    public static int[] throw_(int dices){
+    private static final Throw INSTANCE = new Throw();
+    
+    private final Random rand = new Random();
+
+    private Throw() {}
+
+    public static Throw getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    public int[] throw_(int dices) {
         int[] result = new int[dices];
         Random rand = new Random();
         for (int i = 0; i < dices; i++) {

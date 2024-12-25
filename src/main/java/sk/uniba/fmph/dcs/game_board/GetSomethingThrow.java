@@ -14,7 +14,7 @@ public class GetSomethingThrow implements EvaluateCivilizationCardImmediateEffec
     @Override
     public boolean performEffect(Player player, Effect choice) {
         if(resource == choice){
-            CurrentThrow currentThrow = new CurrentThrow();
+            CurrentThrow currentThrow = CurrentThrow.getInstance();
             currentThrow.initiate(player, choice, 2);
             return true;
         }

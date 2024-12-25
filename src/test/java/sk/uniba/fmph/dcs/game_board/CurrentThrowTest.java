@@ -10,7 +10,21 @@ import java.util.Optional;
 
 public class CurrentThrowTest {
 
+    private static class MockThrow implements ThrowInterface {
+        private final int[] results;
+        
+        public MockThrow(int[] results) {
+            this.results = results;
+        }
+        
+        @Override
+        public int[] throw_(int dices) {
+            return results;
+        }
+    }
+
     private CurrentThrow currentThrow;
+    private ThrowInterface mockThrow;
     private Player mockPlayer;
     private Effect mockEffect;
 
@@ -52,7 +66,8 @@ public class CurrentThrowTest {
     }
     @Before
     public void setUp() {
-        currentThrow = new CurrentThrow();
+        mockThrow = new MockThrow(new int[]{3, 4, 5}); // Predictable test results
+        currentThrow = new CurrentThrow(mockThrow);
 
         MockPlayerBoard mockPlayerBoard = new MockPlayerBoard();
         // Mocking a player
