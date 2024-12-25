@@ -15,8 +15,9 @@ public final class ResourceSource implements InterfaceFigureLocationInternal {
     private final int maxFigures;
     private final int maxFigureColors;
     private final ArrayList<PlayerOrder> figures;
+    private final CurrentThrowInterface currentThrow;
 
-    public ResourceSource(String name, Effect resource, int maxFigures, int maxFigureColors) {
+    public ResourceSource(String name, Effect resource, int maxFigures, int maxFigureColors, CurrentThrowInterface currentThrow) {
         if (!resource.isResourceOrFood()) {
             throw new IllegalArgumentException("Resource must be food or resource");
         }
@@ -25,6 +26,7 @@ public final class ResourceSource implements InterfaceFigureLocationInternal {
         this.maxFigures = maxFigures;
         this.maxFigureColors = maxFigureColors;
         this.figures = new ArrayList<>();
+        this.currentThrow = currentThrow;
     }
 
     @Override
@@ -77,6 +79,8 @@ public final class ResourceSource implements InterfaceFigureLocationInternal {
             }
         }
 
+        // Initialize the throw for resource gathering
+        currentThrow.initiate(player, this.resource, playerFigureCount);
         return ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE;
     }
 

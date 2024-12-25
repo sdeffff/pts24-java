@@ -13,7 +13,7 @@ import java.util.*;
  *
  * <p>This class implements the {@link InterfaceToolUse} interface to manage tool usage during the throw.
  */
-public class CurrentThrow implements InterfaceToolUse {
+public class CurrentThrow implements InterfaceToolUse, CurrentThrowInterface {
 
     private Effect throwsFor;
     private int throwResult;

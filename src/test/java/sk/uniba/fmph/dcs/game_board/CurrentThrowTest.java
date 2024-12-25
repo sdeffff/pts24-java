@@ -141,4 +141,47 @@ public class CurrentThrowTest {
         assertTrue(state.contains("dices"));
         assertTrue(state.contains("dicesResults"));
     }
+    @Test
+    public void testThrowDependencyInjection() {
+        ThrowInterface mockThrow = new ThrowInterface() {
+            @Override
+            public int[] throw_(int dices) {
+                return new int[]{6, 6, 6}; // Always return maximum values
+            }
+        };
+        
+        CurrentThrow currentThrow = new CurrentThrow(mockThrow);
+        currentThrow.initiate(mockPlayer, Effect.WOOD, 3);
+        
+        // Verify the injected throw behavior
+        String state = currentThrow.state();
+        assertTrue(state.contains("18")); // Sum of 6+6+6
+    }
+
+    @Test
+    public void testSingletonBehavior() {
+        CurrentThrow instance1 = CurrentThrow.getInstance();
+        CurrentThrow instance2 = CurrentThrow.getInstance();
+        assertSame(instance1, instance2);
+    }
+
+    @Test
+    public void testInitializeAndToolUsageFlow() {
+        ThrowInterface mockThrow = new ThrowInterface() {
+            @Override
+            public int[] throw_(int dices) {
+                return new int[]{3, 3}; // Predictable results
+            }
+        };
+        
+        CurrentThrow currentThrow = new CurrentThrow(mockThrow);
+        currentThrow.initiate(mockPlayer, Effect.WOOD, 2);
+        
+        assertTrue(currentThrow.canUseTools());
+        assertTrue(currentThrow.useTool(0));
+        assertTrue(currentThrow.finishUsingTools());
+        
+        // Verify can't use tools after finishing
+        assertFalse(currentThrow.useTool(1));
+    }
 }

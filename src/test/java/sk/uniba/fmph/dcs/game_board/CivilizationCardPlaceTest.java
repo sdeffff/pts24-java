@@ -113,4 +113,49 @@ public class CivilizationCardPlaceTest {
         assertEquals(ImmediateEffect.TOOL,
             playerBoard.getCards().get(0).getImmediateEffectType().get(0));
     }
+    @Test
+    public void testSociableIntegrationWithDeck() {
+        // Create a deck with known cards
+        List<CivilizationCard> cards = Arrays.asList(
+            new CivilizationCard(List.of(ImmediateEffect.FOOD), List.of(EndOfGameEffect.FARMER)),
+            new CivilizationCard(List.of(ImmediateEffect.TOOL), List.of(EndOfGameEffect.BUILDER))
+        );
+        CivilizationCardDeck deck = CivilizationCardDeckFactory.createTestDeck(cards);
+        
+        // Create card place with this deck
+        CivilizationCardPlace place = new CivilizationCardPlace(2, new ArrayList<>(), deck, evaluator);
+        place.newTurn(); // Initialize first card
+        
+        // Place figures and make action
+        place.placeFigures(player, 1);
+        Collection<Effect> input = Arrays.asList(Effect.WOOD, Effect.WOOD);
+        Collection<Effect> output = new ArrayList<>();
+        
+        assertEquals(ActionResult.ACTION_DONE, place.makeAction(player, input, output));
+        
+        // Verify interaction with deck
+        assertFalse(deck.isEmpty());
+        place.newTurn();
+        
+        // Verify next card is available
+        assertTrue(place.state().contains("TOOL"));
+    }
+
+    @Test
+    public void testWithReusablePlayerBoardMock() {
+        PlayerBoardMock mockBoard = new PlayerBoardMock();
+        Player testPlayer = new Player(new PlayerOrder(0, 2), mockBoard);
+        
+        // Test figure placement
+        assertTrue(mockBoard.hasFigures(1));
+        assertTrue(cardPlace.placeFigures(testPlayer, 1));
+        
+        // Test resource consumption
+        Collection<Effect> input = Arrays.asList(Effect.WOOD, Effect.WOOD);
+        assertTrue(mockBoard.takeResources(input));
+        
+        // Test card acquisition
+        cardPlace.makeAction(testPlayer, input, new ArrayList<>());
+        assertEquals(1, mockBoard.getCards().size());
+    }
 }
