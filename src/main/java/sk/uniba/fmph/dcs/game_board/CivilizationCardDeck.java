@@ -3,27 +3,43 @@ package sk.uniba.fmph.dcs.game_board;
 import java.util.*;
 
 public class CivilizationCardDeck {
-    private Stack<CivilizationCard> stack;
-    public CivilizationCardDeck(Stack<CivilizationCard> stack){
+    private final Stack<CivilizationCard> stack;
+    
+    public CivilizationCardDeck(Stack<CivilizationCard> stack) {
         this.stack = stack;
     }
 
-    public Optional<CivilizationCard> getTop(){
-        if(!stack.isEmpty()){
-            Optional<CivilizationCard> result = Optional.of(stack.pop());
-            return result;
+    public Optional<CivilizationCard> getTop() {
+        if (!stack.isEmpty()) {
+            return Optional.of(stack.pop());
         }
-        Optional<CivilizationCard> empty = Optional.empty();
-        return empty;
+        return Optional.empty();
+    }
+
+    public boolean isEmpty() {
+        return stack.isEmpty();
     }
 
     public String state() {
-        List<CivilizationCard> result = new ArrayList<>();
+        Stack<CivilizationCard> tempStack = new Stack<>();
+        StringBuilder result = new StringBuilder("[");
+        
+        // Copy cards to temp stack to preserve order
         while (!stack.isEmpty()) {
-            result.add(stack.pop());
+            CivilizationCard card = stack.pop();
+            tempStack.push(card);
+            result.append(card.toString());
+            if (!stack.isEmpty()) {
+                result.append(", ");
+            }
         }
-        Collections.reverse(result);
+        
+        // Restore original stack
+        while (!tempStack.isEmpty()) {
+            stack.push(tempStack.pop());
+        }
+        
+        result.append("]");
         return result.toString();
-
     }
 }
