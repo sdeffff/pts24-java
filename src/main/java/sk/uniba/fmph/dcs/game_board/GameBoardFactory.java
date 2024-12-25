@@ -12,8 +12,8 @@ public class GameBoardFactory {
         
         CurrentThrowInterface currentThrow = new CurrentThrow(throwImpl);
         
-        // Ensure lists are mutable copies for safety
-        List<CivilizationCard> orderedCards = new ArrayList<>(civilizationCards);
+        // Create civilization card deck using factory
+        CivilizationCardDeck cardDeck = CivilizationCardDeckFactory.createProductionDeck(civilizationCards);
         List<Building> orderedBuildings = new ArrayList<>(buildings);
         
         return new GameBoard(
