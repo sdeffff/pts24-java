@@ -1,158 +1,112 @@
 package sk.uniba.fmph.dcs.game_board;
 
-import java.util.*;
 import org.json.JSONObject;
-import sk.uniba.fmph.dcs.stone_age.*;
+import sk.uniba.fmph.dcs.stone_age.ActionResult;
+import sk.uniba.fmph.dcs.stone_age.Effect;
+import sk.uniba.fmph.dcs.stone_age.HasAction;
+import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
 
-import java.util.Map;
+import java.util.*;
 
-public final class ResourceSource implements InterfaceFigureLocationInternal {
-    private final String name;
-    private final Effect resource;
-    private final int maxFigures;
+public class ResourceSource implements InterfaceFigureLocationInternal {
+    private final String sourceName;
+    private final Effect resourceType;
+    private final int maxAllowedFigures;
     private final int maxFigureColors;
-    private final ArrayList<PlayerOrder> figures;
+    private final Map<PlayerOrder, Integer> playerFigures;
 
-    public ResourceSource(String name, Effect resource, int maxFigures, int maxFigureColors) {
-        if (!resource.isResourceOrFood()) {
-            throw new IllegalArgumentException("Resource must be food or resource");
-        }
-        this.name = name;
-        this.resource = resource;
-        this.maxFigures = maxFigures;
-        this.maxFigureColors = maxFigureColors;
-        this.figures = new ArrayList<>();
+    public ResourceSource(String name, Effect resource, int maxFigures, int maxFigureColours) {
+        this.playerFigures = new HashMap<>();
+        this.sourceName = name;
+        this.resourceType = resource;
+        this.maxAllowedFigures = maxFigures;
+        this.maxFigureColors = maxFigureColours;
     }
 
     @Override
     public boolean placeFigures(Player player, int figureCount) {
-        // Check if player can place figures here
-        if (!canPlaceFigures(player, figureCount)) {
+        if (tryToPlaceFigures(player, figureCount) == HasAction.NO_ACTION_POSSIBLE) {
             return false;
         }
 
-        // Add the figures
-        for (int i = 0; i < figureCount; i++) {
-            figures.add(player.playerOrder());
-        }
+        PlayerOrder order = player.playerOrder();
+        playerFigures.merge(order, figureCount, Integer::sum);
+        player.playerBoard().takeFigures(figureCount);
         return true;
     }
 
     @Override
     public HasAction tryToPlaceFigures(Player player, int count) {
+        if (totalPlacedFigures() + count > maxAllowedFigures) {
+            return HasAction.NO_ACTION_POSSIBLE;
+        }
         if (!player.playerBoard().hasFigures(count)) {
             return HasAction.NO_ACTION_POSSIBLE;
         }
 
-        if (canPlaceFigures(player, count)) {
+        PlayerOrder order = player.playerOrder();
+        if (playerFigures.containsKey(order)) {
+            return HasAction.WAITING_FOR_PLAYER_ACTION;
+        } else if (playerFigures.keySet().size() < maxFigureColors) {
             return HasAction.WAITING_FOR_PLAYER_ACTION;
         }
-
         return HasAction.NO_ACTION_POSSIBLE;
     }
 
     @Override
     public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
-        // Verify it's this player's figures
-        if (!hasFiguresFromPlayer(player.playerOrder())) {
+        if (tryToMakeAction(player) == HasAction.NO_ACTION_POSSIBLE) {
             return ActionResult.FAILURE;
         }
 
-        // Resource sources don't take input resources
-        if (!inputResources.isEmpty()) {
-            return ActionResult.FAILURE;
-        }
+        PlayerOrder order = player.playerOrder();
+        int figureCount = playerFigures.getOrDefault(order, 0);
 
-        // Resource sources must output exactly one type of resource per figure
-        int playerFigureCount = countPlayerFigures(player.playerOrder());
-        if (outputResources.size() != playerFigureCount) {
-            return ActionResult.FAILURE;
-        }
-        for (Effect output : outputResources) {
-            if (output != this.resource) {
-                return ActionResult.FAILURE;
-            }
-        }
+        // Assuming currentThrow is initialized elsewhere.
+        // currentThrow.initiate(player, resource, figureCount);
+
+        player.playerBoard().takeFigures(-figureCount);
+        playerFigures.remove(order);
 
         return ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE;
     }
 
     @Override
-    public HasAction tryToMakeAction(Player player) {
-        if (hasFiguresFromPlayer(player.playerOrder())) {
-            return HasAction.WAITING_FOR_PLAYER_ACTION;
+    public boolean skipAction(Player player) {
+        PlayerOrder order = player.playerOrder();
+        if (!playerFigures.containsKey(order)) {
+            return false;
         }
-        return HasAction.NO_ACTION_POSSIBLE;
+
+        // Return figures
+        int figureCount = playerFigures.get(order);
+        player.playerBoard().takeFigures(-figureCount);
+        playerFigures.remove(order);
+        return true;
     }
 
     @Override
-    public boolean skipAction(Player player) {
-        return false; // Can't skip resource gathering
+    public HasAction tryToMakeAction(Player player) {
+        return playerFigures.containsKey(player.playerOrder()) ? HasAction.WAITING_FOR_PLAYER_ACTION : HasAction.NO_ACTION_POSSIBLE;
     }
 
     @Override
     public boolean newTurn() {
-        figures.clear();
-        return false; // Resource sources don't trigger game end
-    }
-
-    private boolean canPlaceFigures(Player player, int figureCount) {
-        // Check if player has enough figures
-        if (!player.playerBoard().hasFigures(figureCount)) {
-            return false;
-        }
-
-        // Check if space available
-        if (figures.size() + figureCount > maxFigures) {
-            return false;
-        }
-
-        // Check if player already has figures here
-        if (hasFiguresFromPlayer(player.playerOrder())) {
-            return false;
-        }
-
-        // Check number of different players
-        if (!figures.isEmpty() && !containsPlayerOrder(figures, player.playerOrder())) {
-            int currentColors = countDistinctPlayers();
-            if (currentColors >= maxFigureColors) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private boolean hasFiguresFromPlayer(PlayerOrder player) {
-        return containsPlayerOrder(figures, player);
-    }
-
-    private int countPlayerFigures(PlayerOrder player) {
-        int count = 0;
-        for (PlayerOrder p : figures) {
-            if (p.equals(player)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    private int countDistinctPlayers() {
-        return (int) figures.stream().distinct().count();
-    }
-
-    private boolean containsPlayerOrder(Collection<PlayerOrder> collection, PlayerOrder player) {
-        return collection.stream().anyMatch(p -> p.equals(player));
+        playerFigures.clear();
+        return false;
     }
 
     public String state() {
-        Map<String, Object> state = Map.of(
-                "name", name,
-                "resource", resource,
-                "maxFigures", maxFigures,
-                "maxFigureColors", maxFigureColors,
-                "figures", figures.stream().map(PlayerOrder::getOrder).toList()
-        );
-        return new JSONObject(state).toString();
+        Map<String, String> map = new HashMap<>();
+        map.put("name", sourceName);
+        map.put("resource", resourceType.toString());
+        map.put("maxFigures", String.valueOf(maxAllowedFigures));
+        map.put("maxFigureColours", String.valueOf(maxFigureColors));
+        map.put("figures", playerFigures.toString());
+        return new JSONObject(map).toString();
+    }
+
+    private int totalPlacedFigures() {
+        return playerFigures.values().stream().mapToInt(Integer::intValue).sum();
     }
 }

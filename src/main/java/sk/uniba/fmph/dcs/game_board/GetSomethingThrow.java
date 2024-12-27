@@ -1,7 +1,7 @@
 package sk.uniba.fmph.dcs.game_board;
 
 import sk.uniba.fmph.dcs.stone_age.Effect;
-import sk.uniba.fmph.dcs.stone_age.Player;
+import sk.uniba.fmph.dcs.game_board.Player;
 
 public class GetSomethingThrow implements EvaluateCivilizationCardImmediateEffect {
     private Effect resource;

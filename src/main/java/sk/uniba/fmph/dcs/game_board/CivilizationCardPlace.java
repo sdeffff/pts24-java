@@ -1,170 +1,177 @@
 package sk.uniba.fmph.dcs.game_board;
 
+import org.json.JSONObject;
 import sk.uniba.fmph.dcs.stone_age.*;
 
 import java.util.*;
 
-/**
- * Represents the area on the game board where players interact with Civilization Cards.
- * Handles figure placement, actions related to card acquisition, and resets at the end of each turn.
- */
 public class CivilizationCardPlace implements InterfaceFigureLocationInternal {
-    // The number of resources required to acquire a civilization card
+
+    private final CivilizationCardDeck cardDeck;
+    private CivilizationCardPlace nextCardPlace;
+    private CivilizationCardPlace previousCardPlace;
     private final int requiredResources;
+    private final List<PlayerOrder> placedFigures;
+    private CivilizationCard currentCard;
+    private boolean isEndOfGame;
 
-    // Evaluates and applies the immediate effect of a civilization card
-    private final EvaluateCivilizationCardImmediateEffect evaluateCivilizationCardImmediateEffect;
-
-    // The deck of civilization cards
-    private final CivilizationCardDeck deck;
-
-    // Stores the player orders (figures) currently placed in this location
-    private final List<PlayerOrder> figures;
-
-    // The topmost civilization card available for acquisition
-    private CivilizationCard currentCivilizationCard;
-
-    // Tracks whether an action has already been made this turn
-    private boolean actionMade;
-
-    /**
-     * Constructor for CivilizationCardPlace.
-     *
-     * @param requiredResources The number of resources needed to acquire a card.
-     * @param figures           A collection to track figures placed in this location.
-     */
-    public CivilizationCardPlace(int requiredResources, List<PlayerOrder> figures, 
-                                 CivilizationCardDeck deck, 
-                                 EvaluateCivilizationCardImmediateEffect evaluateEffect) {
+    public CivilizationCardPlace(int requiredResources, CivilizationCardDeck cardDeck) {
         this.requiredResources = requiredResources;
-        this.figures = figures;
-        this.actionMade = false;
-        this.deck = deck;
-        this.evaluateCivilizationCardImmediateEffect = evaluateEffect;
+        this.cardDeck = cardDeck;
+        this.placedFigures = new ArrayList<>();
+        this.currentCard = drawCard();
+        this.isEndOfGame = false;
     }
 
-    /**
-     * Places a specified number of figures on this location for a player.
-     *
-     * @param player      The player attempting to place figures.
-     * @param figureCount The number of figures to place.
-     * @return True if figures were successfully placed, otherwise false.
-     */
     @Override
     public boolean placeFigures(Player player, int figureCount) {
-        if (!canPlaceFigures(player, figureCount)) {
+        if (tryToPlaceFigures(player, figureCount) == HasAction.NO_ACTION_POSSIBLE) {
             return false;
         }
-        figures.add(player.playerOrder());
+
+        placedFigures.add(player.playerOrder());
+        player.playerBoard().takeFigures(1);
         return true;
     }
 
-    private boolean canPlaceFigures(Player player, int figureCount) {
-        return player.playerBoard().hasFigures(figureCount) && figures.isEmpty() && player.playerBoard()
-                .takeFigures(figureCount);
-    }
-
-    /**
-     * Attempts to validate and place figures for a player.
-     *
-     * @param player The player attempting to place figures.
-     * @param count  The number of figures to place.
-     * @return The action status as HasAction.
-     */
     @Override
     public HasAction tryToPlaceFigures(Player player, int count) {
-        if (isInvalidPlacement(player, count)) {
-            return HasAction.NO_ACTION_POSSIBLE;
-        }
-        figures.add(player.playerOrder());
-        return HasAction.AUTOMATIC_ACTION_DONE;
+        return (!placedFigures.isEmpty() || count != 1 || !player.playerBoard().hasFigures(count))
+                ? HasAction.NO_ACTION_POSSIBLE
+                : HasAction.WAITING_FOR_PLAYER_ACTION;
     }
 
-    private boolean isInvalidPlacement(Player player, int count) {
-        return player == null || count < 1 || count > 10 || !canPlaceFigures(player, count);
-    }
-
-    /**
-     * Executes the action associated with acquiring a civilization card.
-     *
-     * @param player         The player performing the action.
-     * @param inputResources Resources the player is using to acquire the card.
-     * @param outputResources Effects/resources gained from the card (unused here).
-     * @return The result of the action as ActionResult.
-     */
     @Override
     public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
-        if (!canMakeAction(player, inputResources)) {
+        if (inputResources.size() < requiredResources || tryToMakeAction(player) == HasAction.NO_ACTION_POSSIBLE) {
             return ActionResult.FAILURE;
         }
-        applyCardEffects(player, outputResources);
-        currentCivilizationCard = deck.getTop().orElse(null);
-        actionMade = true;
-        return ActionResult.ACTION_DONE;
-    }
 
-    private boolean canMakeAction(Player player, Collection<Effect> inputResources) {
-        return !actionMade && figures.contains(player.playerOrder()) && inputResources.size() >= requiredResources && player.playerBoard().takeResources(inputResources);
-    }
+        Effect[] payment = inputResources.stream().limit(requiredResources).toArray(Effect[]::new);
+        if (payment.length != requiredResources || !player.playerBoard().takeResources(List.of(payment))) {
+            return ActionResult.FAILURE;
+        }
 
-    private void applyCardEffects(Player player, Collection<Effect> outputResources) {
-        player.playerBoard().giveCard(currentCivilizationCard);
-        if (currentCivilizationCard != null) {
-            for (ImmediateEffect effect : currentCivilizationCard.getImmediateEffectType()) {
-                evaluateCivilizationCardImmediateEffect.performEffect(player, Effect.CARD); // Default to CARD effect
+        placedFigures.remove(player.playerOrder());
+        player.playerBoard().takeFigures(-1);
+
+        for (EndOfGameEffect endEffect : currentCard.getEndOfGameEffectType()) {
+            player.playerBoard().giveEndOfGameEffect(List.of(new EndOfGameEffect[]{endEffect}));
+        }
+
+        ActionResult actionResult = ActionResult.ACTION_DONE;
+        for (ImmediateEffect immediateEffect : currentCard.getImmediateEffectType()) {
+            EvaluateCivilizationCardImmediateEffect evaluator = createEffectEvaluator(immediateEffect);
+            if (evaluator != null) {
+                evaluator.performEffect(player, null);
+            }
+
+            if (immediateEffect == ImmediateEffect.ThrowWood || immediateEffect == ImmediateEffect.ThrowClay || immediateEffect == ImmediateEffect.ThrowStone || immediateEffect == ImmediateEffect.ThrowGold) {
+                actionResult = ActionResult.ACTION_DONE_WAIT_FOR_TOOL_USE;
             }
         }
-        if (!outputResources.isEmpty()) {
-            player.playerBoard().giveEffect(outputResources);
+
+        currentCard = null;
+        return actionResult;
+    }
+
+    private EvaluateCivilizationCardImmediateEffect createEffectEvaluator(ImmediateEffect immediateEffect) {
+        Map<ImmediateEffect, EvaluateCivilizationCardImmediateEffect> effectEvaluatorMap = new HashMap<>();
+        effectEvaluatorMap.put(ImmediateEffect.WOOD, new GetSomethingFixed(Effect.WOOD));
+        effectEvaluatorMap.put(ImmediateEffect.CLAY, new GetSomethingFixed(Effect.CLAY));
+        effectEvaluatorMap.put(ImmediateEffect.STONE, new GetSomethingFixed(Effect.STONE));
+        effectEvaluatorMap.put(ImmediateEffect.GOLD, new GetSomethingFixed(Effect.GOLD));
+        effectEvaluatorMap.put(ImmediateEffect.FOOD, new GetSomethingFixed(Effect.FOOD));
+        effectEvaluatorMap.put(ImmediateEffect.ThrowWood, new GetSomethingThrow(Effect.WOOD));
+        effectEvaluatorMap.put(ImmediateEffect.ThrowClay, new GetSomethingThrow(Effect.CLAY));
+        effectEvaluatorMap.put(ImmediateEffect.ThrowStone, new GetSomethingThrow(Effect.STONE));
+        effectEvaluatorMap.put(ImmediateEffect.ThrowGold, new GetSomethingThrow(Effect.GOLD));
+        effectEvaluatorMap.put(ImmediateEffect.CARD, new GetCard(cardDeck));
+        effectEvaluatorMap.put(ImmediateEffect.ArbitraryResource, new GetSomethingChoice(1));
+
+        return effectEvaluatorMap.getOrDefault(immediateEffect, null);
+    }
+
+    @Override
+    public boolean skipAction(Player player) {
+        if (!placedFigures.contains(player.playerOrder())) {
+            return false;
+        }
+
+        placedFigures.remove(player.playerOrder());
+        player.playerBoard().takeFigures(-1);
+        return true;
+    }
+
+    @Override
+    public HasAction tryToMakeAction(Player player) {
+        return (currentCard == null || !placedFigures.contains(player.playerOrder()))
+                ? HasAction.NO_ACTION_POSSIBLE
+                : HasAction.WAITING_FOR_PLAYER_ACTION;
+    }
+
+    @Override
+    public boolean newTurn() {
+        placedFigures.clear();
+        if (currentCard == null) {
+            CivilizationCardPlace previous = findPreviousCardWithCard();
+            if (previous != null) {
+                currentCard = previous.currentCard;
+                previous.currentCard = null;
+            }
+        }
+
+        if (requiredResources == 4) {
+            refillCards();
+        }
+
+        return isEndOfGame;
+    }
+
+    private void refillCards() {
+        CivilizationCardPlace place = this;
+        while (place.nextCardPlace != null) {
+            if (place.currentCard == null) {
+                place.currentCard = drawCard();
+            }
+            place = place.nextCardPlace;
         }
     }
 
-    /**
-     * Allows a player to skip the action for this location.
-     *
-     * @param player The player skipping the action.
-     * @return True after successfully skipping the action.
-     */
-    @Override
-    public boolean skipAction(Player player) {
-        figures.remove(player.playerOrder());
-        actionMade = true;
-        return true;
-    }
-
-    /**
-     * Checks if the player can perform the action associated with this location.
-     *
-     * @param player The player attempting the action.
-     * @return The action status as HasAction.
-     */
-    @Override
-    public HasAction tryToMakeAction(Player player) {
-        return actionMade || !figures.contains(player.playerOrder()) ? HasAction.NO_ACTION_POSSIBLE : HasAction.AUTOMATIC_ACTION_DONE;
-    }
-
-    /**
-     * Resets the location for the next game round.
-     *
-     * @return True after successfully resetting.
-     */
-    @Override
-    public boolean newTurn() {
-        actionMade = false;
-        figures.clear();
-        currentCivilizationCard = deck.getTop().orElse(null);
-        return true;
+    private CivilizationCardPlace findPreviousCardWithCard() {
+        CivilizationCardPlace place = this;
+        while (place.previousCardPlace != null && place.previousCardPlace.currentCard == null) {
+            place = place.previousCardPlace;
+        }
+        return place.previousCardPlace;
     }
 
     public String state() {
-        return "CivilizationCardPlace State:\n" +
-                "  Current Card: " +
-                (currentCivilizationCard != null ? currentCivilizationCard.toString() : "None") +
-                "\n" +
-                "  Action Made: " + actionMade + "\n" +
-                "  Figures Placed: " + figures.size() + " " +
-                (figures.isEmpty() ? "(None)" : figures) + "\n" +
-                "  Deck Status: " + deck.state();
+        Map<String, String> stateMap = new HashMap<>();
+        stateMap.put("requiredResources", String.valueOf(requiredResources));
+        stateMap.put("placedFigures", placedFigures.toString());
+        return new JSONObject(stateMap).toString();
+    }
+
+    private CivilizationCard drawCard() {
+        Optional<CivilizationCard> optionalCard = cardDeck.getTop();
+        if (optionalCard.isEmpty()) {
+            isEndOfGame = true;
+            return null;
+        }
+        return optionalCard.get();
+    }
+
+    public CivilizationCard getCurrentCard() {
+        return currentCard;
+    }
+
+    public void setup(CivilizationCardPlace next, CivilizationCardPlace previous) {
+        this.nextCardPlace = next;
+        this.previousCardPlace = previous;
+    }
+
+    public int getRequiredResources() {
+        return requiredResources;
     }
 }
-
