@@ -9,10 +9,10 @@ import java.util.*;
 public class CurrentThrow implements InterfaceToolUse {
 
     private Effect effectType;
-    private int resultValue;
+    private int res;
     private Player currentPlayer;
     private int totalSum, divisor;
-    private boolean isUsed;
+    private boolean isEffectUsed;
 
     private static class ThrowDices {
         public static int[] rollDice(int count) {
@@ -22,14 +22,14 @@ public class CurrentThrow implements InterfaceToolUse {
     }
 
     public CurrentThrow() {
-        isUsed = false;
-        resultValue = 0;
+        isEffectUsed = false;
+        res = 0;
         totalSum = 0;
         divisor = 1;
     }
 
     public void initiate(Player player, Effect effect, int diceCount) {
-        isUsed = false;
+        isEffectUsed = false;
         this.effectType = effect;
         this.currentPlayer = player;
 
@@ -40,7 +40,6 @@ public class CurrentThrow implements InterfaceToolUse {
         int[] diceResults = ThrowDices.rollDice(diceCount);
         this.totalSum = Arrays.stream(diceResults).sum();
 
-        // Determine divisor based on the resource type.
         this.divisor = switch (effect) {
             case FOOD -> 2;
             case WOOD -> 3;
@@ -50,13 +49,17 @@ public class CurrentThrow implements InterfaceToolUse {
             default -> 1;
         };
 
-        this.resultValue = this.totalSum / this.divisor;
+        this.res = this.totalSum / this.divisor;
     }
 
     public int getResultValue() {
-        return resultValue;
+        return res;
     }
 
+    /**
+        @param toolIndex The index of the tool being used.
+        @return True if the tool was successfully used, false otherwise.
+    */
     @Override
     public boolean useTool(int toolIndex) {
         if (!canUseTools()) {
@@ -73,7 +76,7 @@ public class CurrentThrow implements InterfaceToolUse {
                 () -> { return; }
         );
 
-        this.resultValue = this.totalSum / this.divisor;
+        this.res = this.totalSum / this.divisor;
         return true;
     }
 
@@ -84,15 +87,15 @@ public class CurrentThrow implements InterfaceToolUse {
 
     @Override
     public boolean finishUsingTools() {
-        if (isUsed || effectType == null) {
+        if (isEffectUsed || effectType == null) {
             return false;
         }
 
-        Effect[] effectArray = new Effect[resultValue];
-        Arrays.fill(effectArray, effectType);
+        Effect[] effects = new Effect[res];
+        Arrays.fill(effects, effectType);
 
-        currentPlayer.playerBoard().giveEffect(List.of(effectArray));
-        isUsed = true;
+        currentPlayer.playerBoard().giveEffect(List.of(effects));
+        isEffectUsed = true;
         return true;
     }
 }

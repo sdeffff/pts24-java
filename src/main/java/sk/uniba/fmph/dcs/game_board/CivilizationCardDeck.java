@@ -12,6 +12,7 @@ public class CivilizationCardDeck {
         this.cardStack = cardStack;
     }
 
+    //Gets card that are at the top of the deck
     public Optional<CivilizationCard> getTop() {
         if (cardStack.isEmpty()) {
             return Optional.empty();
