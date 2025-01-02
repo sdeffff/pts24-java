@@ -188,13 +188,33 @@ public class ResourceSourceTest {
 
         @Override
         public Optional<Optional<Integer>> useTool(int idx) {
-            return OptionalInt.of(1); // Provide a valid mock value
+            OptionalInt optionalInt = OptionalInt.of(1);
+
+            Optional<Integer> optionalInteger = optionalInt.isPresent() ?
+                    Optional.of(optionalInt.getAsInt()) :
+                    Optional.empty();
+
+            return Optional.of(optionalInteger);
         }
     }
 
-    private static class MockPlayer extends Player {
+    private static class MockPlayer implements Player {
+        private final PlayerOrder order;
+        private final InterfacePlayerBoardGameBoard playerBoard;
+
         public MockPlayer(PlayerOrder order, InterfacePlayerBoardGameBoard playerBoard) {
-            super(order, playerBoard);
+            this.order = order;
+            this.playerBoard = playerBoard;
+        }
+
+        @Override
+        public PlayerOrder playerOrder() {
+            return order;
+        }
+
+        @Override
+        public InterfacePlayerBoardGameBoard playerBoard() {
+            return playerBoard;
         }
     }
 }
