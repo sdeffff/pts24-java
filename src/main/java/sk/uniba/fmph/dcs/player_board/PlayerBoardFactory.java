@@ -5,6 +5,9 @@ import sk.uniba.fmph.dcs.stone_age.TribeFedStatus;
 import java.util.*;
 
 public class PlayerBoardFactory {
+    private static final int DEFAULT_STARTING_FIGURES = 5;
+    private static final int DEFAULT_INITIAL_FOOD = 5;
+
     private PlayerBoardFactory() {
     }
 
@@ -34,7 +37,6 @@ public class PlayerBoardFactory {
      * initialized with default values for figures and food.
      */
     public static Map.Entry<PlayerBoard, PlayerBoardGameBoardFacade> createDefaultPlayerBoard() {
-        return createPlayerBoard(5,
-                5);
+        return createPlayerBoard(DEFAULT_STARTING_FIGURES, DEFAULT_INITIAL_FOOD);
     }
 }

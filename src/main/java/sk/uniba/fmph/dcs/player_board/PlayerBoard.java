@@ -29,13 +29,18 @@ public class PlayerBoard implements InterfaceGetState {
      * @param pt  The player's tools.
      * @param tfs The player's tribe fed status.
      */
-    public PlayerBoard(final PlayerCivilisationCards pcc, final PlayerFigures pf, final PlayerResourcesAndFood prf,
-                       final PlayerTools pt, final TribeFedStatus tfs) {
-        this.playerCivilisationCards = pcc;
-        this.playerFigures = pf;
-        this.playerResourcesAndFood = prf;
-        this.playerTools = pt;
-        this.tribeFedStatus = tfs;
+    public PlayerBoard(
+            final PlayerCivilisationCards pcc,
+            final PlayerFigures pf,
+            final PlayerResourcesAndFood prf,
+            final PlayerTools pt,
+            final TribeFedStatus tfs
+    ) {
+        this.playerCivilisationCards = pcc != null ? pcc : new PlayerCivilisationCards();
+        this.playerFigures = pf != null ? pf : new PlayerFigures();
+        this.playerResourcesAndFood = prf != null ? prf : new PlayerResourcesAndFood();
+        this.playerTools = pt != null ? pt : new PlayerTools();
+        this.tribeFedStatus = tfs != null ? tfs : new TribeFedStatus(this.playerFigures);
 
         this.points = 0;
         this.houses = 0;
@@ -46,16 +51,9 @@ public class PlayerBoard implements InterfaceGetState {
      * Creates a PlayerBoard with default components.
      */
     public PlayerBoard() {
-        this.playerResourcesAndFood = new PlayerResourcesAndFood();
-        this.playerFigures = new PlayerFigures();
-        this.playerTools = new PlayerTools();
-        this.playerCivilisationCards = new PlayerCivilisationCards();
-        this.tribeFedStatus = new TribeFedStatus(this.playerFigures);
-
-        this.points = 0;
-        this.houses = 0;
-        this.endOfGamePointsAdded = false;
+        this(null, null, null, null, null);
     }
+
 
     /**
      * Prepares the player board for a new turn.
@@ -149,22 +147,17 @@ public class PlayerBoard implements InterfaceGetState {
         this.endOfGamePointsAdded = true;
     }
 
-    /**
-     * Gets a structured summary of the player's board state.
-     *
-     * @return A string representation of the player board's current state.
-     */
     @Override
     public String state() {
-        Map<String, Object> state = Map.of(
-                "points", this.points,
-                "houses", this.houses,
-                "resourcesAndFood", this.playerResourcesAndFood.state(),
-                "figures", this.playerFigures.state(),
-                "tools", this.playerTools.state(),
-                "civilizationCards", this.playerCivilisationCards.state(),
-                "tribeFeedingStatus", this.tribeFedStatus.state()
-        );
+        Map<String, Object> state = new HashMap<>();
+        state.put("points", this.points);
+        state.put("houses", this.houses);
+        state.put("resourcesAndFood", this.playerResourcesAndFood.state());
+        state.put("figures", this.playerFigures.state());
+        state.put("tools", this.playerTools.state());
+        state.put("civilizationCards", this.playerCivilisationCards.state());
+        state.put("tribeFeedingStatus", this.tribeFedStatus.state());
+
         return new JSONObject(state).toString();
     }
 }
