@@ -11,48 +11,50 @@ import java.util.*;
  * Represents the game board, managing all locations and available resources for players.
  */
 public class GameBoard implements InterfaceGetState {
-
     private final Map<Location, InterfaceFigureLocationInternal> locations;
     private static final int CLAY_IN_CLAY_MOUND = 18;
-    private static final int STONE_IN_QUARY = 12;
+    private static final int STONE_IN_QUARRY = 12;
     private static final int GOLD_IN_RIVER = 10;
     private static final int WOOD_IN_FOREST = 28;
-    private static final int FOOD_IN_HUNTING_GROUNDS = Integer.MAX_VALUE; // No limit for food gathering.
+    private static final int FOOD_IN_HUNTING_GROUNDS = Integer.MAX_VALUE;
     private static final int BUILDING_PILES = 4;
-    private static final int CIVILIZATION_CARDS_PLACES = 4;
 
-    private CivilizationCard[] civilizationCards;
+    private static final String[] RESOURCE_NAMES = {
+            "Clay Mound", "Forest", "Quarry", "River", "Hunting Grounds"
+    };
 
     /**
      * Initializes the game board with the given players and buildings.
      *
      * @param players   A collection of players participating in the game.
-     * @param buildings An array of building tiles available on the board.
+     * @param buildings An array of building tiles available on the board. Must have at least 4 elements.
+     * @throws IllegalArgumentException if buildings is null or has fewer than 4 elements.
      */
     public GameBoard(final Collection<Player> players, final Building[] buildings) {
-        ToolMakerHutsFields fields = new ToolMakerHutsFields(players.size());
+        if (buildings == null || buildings.length < BUILDING_PILES) {
+            throw new IllegalArgumentException("Buildings array must have at least 4 elements.");
+        }
+
         locations = new HashMap<>();
+        ToolMakerHutFields fields = new ToolMakerHutFields(players.size());
 
         locations.put(Location.HUT, new PlaceOnHutAdaptor(fields));
         locations.put(Location.FIELD, new PlaceOnFieldsAdaptor(fields));
         locations.put(Location.TOOL_MAKER, new PlaceOnToolMakerAdaptor(fields));
 
-        // Add resources
-        locations.put(Location.CLAY_MOUND, new ResourceSource("Clay Mound", Effect.CLAY, CLAY_IN_CLAY_MOUND, 1));
-        locations.put(Location.FOREST, new ResourceSource("Forest", Effect.WOOD, WOOD_IN_FOREST, 1));
-        locations.put(Location.QUARY, new ResourceSource("Quarry", Effect.STONE, STONE_IN_QUARY, 1));
-        locations.put(Location.RIVER, new ResourceSource("River", Effect.GOLD, GOLD_IN_RIVER, 1));
-        locations.put(Location.HUNTING_GROUNDS, new ResourceSource("Hunting Grounds", Effect.FOOD, FOOD_IN_HUNTING_GROUNDS, Integer.MAX_VALUE));
+        locations.put(Location.CLAY_MOUND, new ResourceSource(RESOURCE_NAMES[0], Effect.CLAY, CLAY_IN_CLAY_MOUND, 1));
+        locations.put(Location.FOREST, new ResourceSource(RESOURCE_NAMES[1], Effect.WOOD, WOOD_IN_FOREST, 1));
+        locations.put(Location.QUARY, new ResourceSource(RESOURCE_NAMES[2], Effect.STONE, STONE_IN_QUARRY, 1));
+        locations.put(Location.RIVER, new ResourceSource(RESOURCE_NAMES[3], Effect.GOLD, GOLD_IN_RIVER, 1));
+        locations.put(Location.HUNTING_GROUNDS, new ResourceSource(RESOURCE_NAMES[4], Effect.FOOD, FOOD_IN_HUNTING_GROUNDS, Integer.MAX_VALUE));
 
-        // Add building tiles
-        ArrayList<Location> buildingTiles = new ArrayList<>();
-        buildingTiles.add(Location.BUILDING_TILE1);
-        buildingTiles.add(Location.BUILDING_TILE2);
-        buildingTiles.add(Location.BUILDING_TILE3);
-        buildingTiles.add(Location.BUILDING_TILE4);
+        //building tiles
+        Location[] buildingLocations = {
+                Location.BUILDING_TILE1, Location.BUILDING_TILE2, Location.BUILDING_TILE3, Location.BUILDING_TILE4
+        };
 
         for (int i = 0; i < BUILDING_PILES; i++) {
-            locations.put(buildingTiles.get(i), new BuildingTile(buildings[i]));
+            locations.put(buildingLocations[i], new BuildingTile(buildings[i]));
         }
 
         generateCards();
@@ -62,7 +64,7 @@ public class GameBoard implements InterfaceGetState {
      * Generates civilization cards for the game deck.
      */
     private void generateCards() {
-        //...
+        //..
     }
 
     /**
@@ -72,13 +74,17 @@ public class GameBoard implements InterfaceGetState {
      */
     @Override
     public String state() {
-        Map<String, String> states = new HashMap<>();
+        Map<String, String> state = new HashMap<>();
 
         for (var entry : locations.entrySet()) {
-            states.put(entry.getKey().toString(), entry.getValue().state());
+            InterfaceFigureLocationInternal location = entry.getValue();
+            if (location instanceof InterfaceGetState) {
+                state.put(entry.getKey().toString(), ((InterfaceGetState) location).state());
+            } else {
+                state.put(entry.getKey().toString(), "State not available");
+            }
         }
 
-        //Converting to JSON
-        return new JSONObject(states).toString(2); // Pretty-print with 2-space indentation
+        return new JSONObject(state).toString(2);
     }
 }
