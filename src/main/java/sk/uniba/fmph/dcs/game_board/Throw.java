@@ -1,16 +1,20 @@
 package sk.uniba.fmph.dcs.game_board;
 
-import java.util.Random;
+import java.util.ArrayList;
 
-public class Throw {
+public class Throw implements ThrowInterface {
+    private static final int DICESIDES = 6;
 
-    // I can't use the method name "throw" because it causes a syntax error.
-    public static int[] throw_(int dices){
-        int[] result = new int[dices];
-        Random rand = new Random();
+    public final ArrayList<Integer> throwDice(final int dices) {
+        ArrayList<Integer> result = new ArrayList<>();
         for (int i = 0; i < dices; i++) {
-            result[i] = rand.nextInt(6)+1;
+            result.add((int) ((Math.random() * DICESIDES) + 1));
         }
         return result;
+    }
+
+    @Override
+    public void setRolls(final ArrayList<Integer> rolls) {
+
     }
 }

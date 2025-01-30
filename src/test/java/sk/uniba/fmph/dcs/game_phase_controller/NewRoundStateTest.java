@@ -1,63 +1,84 @@
 package sk.uniba.fmph.dcs.game_phase_controller;
 
-import junit.framework.TestCase;
-import sk.uniba.fmph.dcs.stone_age.*;
+import org.junit.Test;
+import sk.uniba.fmph.dcs.stone_age.ActionResult;
+import sk.uniba.fmph.dcs.stone_age.HasAction;
+import sk.uniba.fmph.dcs.stone_age.InterfaceFigureLocation;
+import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
+import sk.uniba.fmph.dcs.stone_age.Effect;
+import sk.uniba.fmph.dcs.stone_age.InterfaceNewTurn;
 
-public class NewRoundStateTest extends TestCase {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
-    private NewRoundState newRoundState;
-    private MockNewTurn mockNewTurn;
-    private PlayerOrder player;
+import static org.junit.Assert.assertEquals;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+public class NewRoundStateTest {
+    static class FigureLocationMock implements InterfaceFigureLocation {
+        private final boolean newTurn;
 
-        // Initialize player
-        player = new PlayerOrder(0, 3);
+        FigureLocationMock(boolean newTurn) {
+            this.newTurn = newTurn;
+        }
 
-        // Initialize mock InterfaceNewTurn
-        mockNewTurn = new MockNewTurn();
+        @Override
+        public boolean placeFigures(PlayerOrder player, int figureCount) {
+            return false;
+        }
 
-        // Initialize NewRoundState with mockNewTurn
-        newRoundState = new NewRoundState(mockNewTurn);
-    }
+        @Override
+        public HasAction tryToPlaceFigures(PlayerOrder player, int count) {
+            return null;
+        }
 
-    public void testTryToMakeAutomaticAction() {
-        // Test that the new round is initialized and returns AUTOMATIC_ACTION_DONE
-        HasAction hasAction = newRoundState.tryToMakeAutomaticAction(player);
-        assertEquals(HasAction.AUTOMATIC_ACTION_DONE, hasAction);
-        assertTrue(mockNewTurn.isNewTurnCalled());
+        @Override
+        public ActionResult makeAction(PlayerOrder player, Collection<Effect> inputResources,
+                                       Collection<Effect> outputResources) {
+            return null;
+        }
 
-        // Test that calling again returns NO_ACTION_POSSIBLE
-        hasAction = newRoundState.tryToMakeAutomaticAction(player);
-        assertEquals(HasAction.NO_ACTION_POSSIBLE, hasAction);
+        @Override
+        public boolean skipAction(PlayerOrder player) {
+            return false;
+        }
 
-        // Simulate game ended
-        mockNewTurn.setGameEnded(true);
-        // Re-initialize NewRoundState to reset roundInitialized
-        newRoundState = new NewRoundState(mockNewTurn);
-        hasAction = newRoundState.tryToMakeAutomaticAction(player);
-        assertEquals(HasAction.NO_ACTION_POSSIBLE, hasAction);
-    }
-
-    // Mock implementation of InterfaceNewTurn for testing
-    private static class MockNewTurn implements InterfaceNewTurn {
-        private boolean newTurnCalled = false;
-        private boolean gameEnded = false;
+        @Override
+        public HasAction tryToMakeAction(PlayerOrder player) {
+            return null;
+        }
 
         @Override
         public boolean newTurn() {
-            newTurnCalled = true;
-            return gameEnded;
-        }
-
-        public boolean isNewTurnCalled() {
-            return newTurnCalled;
-        }
-
-        public void setGameEnded(boolean gameEnded) {
-            this.gameEnded = gameEnded;
+            return newTurn;
         }
     }
+
+    static class NewRoundMock implements InterfaceNewTurn {
+        boolean newTurn = false;
+
+        @Override
+        public void newTurn() {
+            newTurn = true;
+        }
+    }
+
+    private final Map<PlayerOrder, InterfaceNewTurn> playerOrderNewRoundMockMap = Map.of(new PlayerOrder(1, 1),
+            new NewRoundMock());
+
+    @Test
+    public void tryToMakeAutomaticActionTest() {
+        List<InterfaceFigureLocation> places1 = new ArrayList<>();
+        places1.add(new FigureLocationMock(true));
+
+        List<InterfaceFigureLocation> places2 = new ArrayList<>();
+        places2.add(new FigureLocationMock(false));
+
+        NewRoundState nrs1 = new NewRoundState(places1, playerOrderNewRoundMockMap);
+        assertEquals(nrs1.tryToMakeAutomaticAction(new PlayerOrder(1, 1)), HasAction.NO_ACTION_POSSIBLE);
+        NewRoundState nrs2 = new NewRoundState(places2, playerOrderNewRoundMockMap);
+        assertEquals(nrs2.tryToMakeAutomaticAction(new PlayerOrder(1, 1)), HasAction.AUTOMATIC_ACTION_DONE);
+    }
+
 }

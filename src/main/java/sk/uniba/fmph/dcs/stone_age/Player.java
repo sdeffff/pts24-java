@@ -1,6 +1,5 @@
 package sk.uniba.fmph.dcs.stone_age;
 
-public interface Player {
-    PlayerOrder playerOrder();
-    PlayerBoard playerBoard();
+public record Player(PlayerOrder playerOrder, InterfacePlayerBoardGameBoard playerBoard) implements sk.uniba.fmph.dcs.game_board.Player {
+
 }

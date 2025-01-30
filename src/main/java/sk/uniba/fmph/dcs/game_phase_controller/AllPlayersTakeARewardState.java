@@ -1,67 +1,68 @@
 package sk.uniba.fmph.dcs.game_phase_controller;
 
-import org.apache.commons.lang3.tuple.Pair;
-import sk.uniba.fmph.dcs.stone_age.*;
+import sk.uniba.fmph.dcs.stone_age.ActionResult;
+import sk.uniba.fmph.dcs.stone_age.Effect;
+import sk.uniba.fmph.dcs.stone_age.HasAction;
+import sk.uniba.fmph.dcs.stone_age.InterfaceTakeReward;
+import sk.uniba.fmph.dcs.stone_age.Location;
+import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
 
 import java.util.Collection;
 
-public class AllPlayersTakeARewardState implements InterfaceGamePhaseState{
+public final class AllPlayersTakeARewardState implements InterfaceGamePhaseState {
 
-    InterfaceTakeReward reward;
+    private final InterfaceTakeReward takeReward;
 
+    public AllPlayersTakeARewardState(final InterfaceTakeReward takeReward) {
+        this.takeReward = takeReward;
+    }
 
     @Override
-    public ActionResult placeFigures(PlayerOrder player, Location location, int figuresCount) {
+    public ActionResult placeFigures(final PlayerOrder player, final Location location, final int figuresCount) {
         return ActionResult.FAILURE;
     }
 
     @Override
-    public ActionResult makeAction(PlayerOrder player, Location location, Collection<Effect> inputResources, Collection<Effect> outputResources) {
+    public ActionResult makeAction(final PlayerOrder player, final Location location,
+                                   final Collection<Effect> inputResources, final Collection<Effect> outputResources) {
         return ActionResult.FAILURE;
     }
 
     @Override
-    public ActionResult skipAction(PlayerOrder player, Location location) {
+    public ActionResult skipAction(final PlayerOrder player, final Location location) {
         return ActionResult.FAILURE;
     }
 
     @Override
-    public ActionResult useTools(PlayerOrder player, int toolIndex) {
+    public ActionResult useTools(final PlayerOrder player, final int toolIndex) {
         return ActionResult.FAILURE;
     }
 
     @Override
-    public ActionResult noMoreToolsThisThrow(PlayerOrder player) {
+    public ActionResult noMoreToolsThisThrow(final PlayerOrder player) {
         return ActionResult.FAILURE;
     }
 
     @Override
-    public ActionResult feedTribe(PlayerOrder player, Collection<Effect> resources) {
+    public ActionResult feedTribe(final PlayerOrder player, final Collection<Effect> resources) {
         return ActionResult.FAILURE;
     }
 
     @Override
-    public ActionResult doNotFeedThisTurn(PlayerOrder player) {
+    public ActionResult doNotFeedThisTurn(final PlayerOrder player) {
         return ActionResult.FAILURE;
     }
 
     @Override
-    public ActionResult makeAllPlayersTakeARewardChoice(PlayerOrder player, Effect reward) {
-        return this.reward.takeReward(player, reward)
-        ? ActionResult.ACTION_DONE
-        : ActionResult.FAILURE;
-    }
-
-    @Override
-    public HasAction tryToMakeAutomaticAction(PlayerOrder player) {
-        if(reward.playerHasAllRewards(player)) return HasAction.NO_ACTION_POSSIBLE;
-        Pair<PlayerOrder, Effect> res = reward.playerLastReward();
-        if (res != null) {
-            PlayerOrder playerLast = res.getLeft();
-            Effect lastEffect = res.getRight();
-            reward.takeReward(playerLast, lastEffect);
-            return HasAction.AUTOMATIC_ACTION_DONE;
+    public ActionResult makeAllPlayersTakeARewardChoice(final PlayerOrder player, final Effect reward) {
+        if (takeReward.takeReward(player, reward)) {
+            return ActionResult.ACTION_DONE;
         }
-        return HasAction.WAITING_FOR_PLAYER_ACTION;
+        return ActionResult.FAILURE;
+    }
+
+    @Override
+    public HasAction tryToMakeAutomaticAction(final PlayerOrder player) {
+        return takeReward.tryMakeAction(player);
     }
 }

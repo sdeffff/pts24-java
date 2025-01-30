@@ -1,40 +1,62 @@
 package sk.uniba.fmph.dcs.game_board;
 
-import java.util.Collection;
 import sk.uniba.fmph.dcs.stone_age.ActionResult;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
 
 import java.util.Collection;
 
-public class PlaceOnHutAdaptor implements InterfaceFigureLocationInternal{
-    @Override
-    public boolean placeFigures(Player player, int figureCount) {
-        return false;
+public final class PlaceOnHutAdaptor implements InterfaceFigureLocationInternal {
+    private final ToolMakerHutFields hut;
+
+    public PlaceOnHutAdaptor(final ToolMakerHutFields hut) {
+        this.hut = hut;
     }
 
     @Override
-    public HasAction tryToPlaceFigures(Player player, int count) {
-        return HasAction.NO_ACTION_POSSIBLE;
+    public boolean placeFigures(final Player player, final int figureCount) {
+        if (tryToPlaceFigures(player, figureCount).equals(HasAction.NO_ACTION_POSSIBLE)) {
+            return false;
+        }
+        return hut.placeOnHut(player);
     }
 
     @Override
-    public ActionResult makeAction(Player player, Collection<Effect> inputResources, Collection<Effect> outputResources) {
-        return ActionResult.FAILURE;
+    public HasAction tryToPlaceFigures(final Player player, final int count) {
+        if (count != 2 || !hut.canPlaceOnHut(player) || !player.playerBoard().hasFigures(count)) {
+            return HasAction.NO_ACTION_POSSIBLE;
+        }
+        return HasAction.WAITING_FOR_PLAYER_ACTION;
     }
 
     @Override
-    public boolean skipAction(Player player) {
-        return false;
+    public ActionResult makeAction(final Player player, final Collection<Effect> inputResources,
+                                   final Collection<Effect> outputResources) {
+        if (tryToMakeAction(player).equals(HasAction.NO_ACTION_POSSIBLE) || !hut.actionHut(player)) {
+            return ActionResult.FAILURE;
+        }
+        return ActionResult.ACTION_DONE;
     }
 
     @Override
-    public HasAction tryToMakeAction(Player player) {
+    public boolean skipAction(final Player player) {
+        return hut.placeOnHut(player);
+    }
+
+    @Override
+    public HasAction tryToMakeAction(final Player player) {
+        if (hut.tryToMakeActionHut(player)) {
+            return HasAction.WAITING_FOR_PLAYER_ACTION;
+        }
         return HasAction.NO_ACTION_POSSIBLE;
     }
 
     @Override
     public boolean newTurn() {
-        return false;
+        return hut.newTurn();
+    }
+
+    public String state() {
+        return "";
     }
 }

@@ -1,72 +1,111 @@
 package sk.uniba.fmph.dcs.player_board;
 
 import org.json.JSONObject;
-import sk.uniba.fmph.dcs.stone_age.InterfaceGetState;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.OptionalInt;
 
-public class PlayerTools implements InterfaceGetState {
+public final class PlayerTools {
+    private static final int MAX_TOOL_VALUE = 4;
+    private static final int NUMBER_OF_TOOL_PLACES = 3;
+    private final ArrayList<Integer> tools;
+    private final ArrayList<Boolean> usedTools;
+    private final ArrayList<Integer> singleUseTools;
+    private final ArrayList<Boolean> usedSingleUseTools;
+    private int indexToIncrement = 0;
 
+    public PlayerTools() {
+        this.tools = new ArrayList<>(NUMBER_OF_TOOL_PLACES);
+        this.usedTools = new ArrayList<>(NUMBER_OF_TOOL_PLACES);
+        this.singleUseTools = new ArrayList<>();
+        this.usedSingleUseTools = new ArrayList<>();
+    }
+    public int getToolCount() {
+        int result = 0;
+        for (int x : tools) {
+            result += x;
+        }
+        return result;
+    }
 
-    private final int[] tools = new int[3];
-    private final boolean[] usedTools = new boolean[3];
-    private int totalToolsCount;
-    private int roundToolsCount;
-    private final List<Integer> additionalTools = new ArrayList<>();
-
-    public boolean newTurn(){
-        Arrays.fill(usedTools, false);
-        roundToolsCount = totalToolsCount;
-        return false; // Does not trigger game end
+    public void newTurn() {
+        for (int i = 0; i < usedTools.size(); i++) {
+            if (usedTools.get(i)) {
+                usedTools.set(i, false);
+            }
+        }
     }
 
     public void addTool() {
-        if (totalToolsCount < 12) {
-            int position = totalToolsCount % 3;
-            int value = 1 + totalToolsCount / 3;
-            tools[position] = value;
-            totalToolsCount++;
-            roundToolsCount++;
-        }
-    }
-
-    public void addSingleUseTool(int strength) {
-        additionalTools.add(strength);
-        totalToolsCount += strength;
-        roundToolsCount += strength;
-    }
-
-    public Optional<Integer> useTool(int index) {
-        if (index > 2) {
-            int additionalIndex = index % 3;
-            int additionalToolValue = additionalTools.get(additionalIndex);
-            totalToolsCount -= additionalToolValue;
-            roundToolsCount -= additionalToolValue;
-            additionalTools.remove(additionalIndex);
-            return Optional.of(additionalToolValue);
+        if (tools.size() < NUMBER_OF_TOOL_PLACES) {
+            tools.add(1);
+            usedTools.add(false);
+        } else if (tools.get(indexToIncrement) < MAX_TOOL_VALUE) {
+            tools.set(indexToIncrement, tools.get(indexToIncrement) + 1);
+            indexToIncrement = (indexToIncrement + 1) % NUMBER_OF_TOOL_PLACES;
         } else {
-            roundToolsCount = roundToolsCount - tools[index];
-            usedTools[index] = true;
-            return Optional.of(tools[index]);
+            throw new IllegalStateException("All tools values equals MAX_TOOL_VALUE");
         }
     }
 
-    public boolean hasSufficientTools(int goal) {
-        return goal <= roundToolsCount;
+    public void addSingleUseTool(final int strength) {
+        if (strength <= 1 || strength > MAX_TOOL_VALUE) {
+            throw new IllegalArgumentException("Strength is not from interval <2, 4>");
+        } else {
+            singleUseTools.add(strength);
+            usedSingleUseTools.add(false);
+        }
     }
 
+    public OptionalInt useTool(final int index) {
+        if (index >= NUMBER_OF_TOOL_PLACES + singleUseTools.size()) {
+            return OptionalInt.empty();
+        } else if (tools.size() <= index && index < NUMBER_OF_TOOL_PLACES) {
+            return OptionalInt.empty();
+        } else if (index < NUMBER_OF_TOOL_PLACES) {
+            if (!usedTools.get(index)) {
+                usedTools.set(index, true);
+                return OptionalInt.of(tools.get(index));
+            }
+            return OptionalInt.empty();
+        } else if (!usedSingleUseTools.get(index - NUMBER_OF_TOOL_PLACES)) {
+            usedSingleUseTools.set(index - NUMBER_OF_TOOL_PLACES, true);
+            return OptionalInt.of(singleUseTools.get(index - NUMBER_OF_TOOL_PLACES));
+        }
+        return OptionalInt.empty();
+    }
 
-    @Override
+    public boolean hasSufficientTools(final int goal) {
+        int sum = 0;
+        for (int i = 0; i < tools.size(); i++) {
+            if (!usedTools.get(i)) {
+                sum += tools.get(i);
+            }
+            if (sum >= goal) {
+                return true;
+            }
+        }
+
+        for (int i = 0; i < singleUseTools.size(); i++) {
+            if (!usedSingleUseTools.get(i)) {
+                sum += singleUseTools.get(i);
+            }
+            if (sum >= goal) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String state() {
-        Map<String, Object> state = Map.of(
-                "tools", tools,
-                "usedTools", usedTools,
-                "totalToolsCount", totalToolsCount,
-                "roundToolsCount", roundToolsCount,
-                "additionalTools", additionalTools
+        Map<String, String> state = Map.of(
+                "tools", tools.toString(),
+                "singleUseTools", singleUseTools.toString(),
+                "usedTools", usedTools.toString(),
+                "usedSingleUseTools", usedSingleUseTools.toString()
         );
 
         return new JSONObject(state).toString();
     }
-
 }

@@ -2,111 +2,140 @@ package sk.uniba.fmph.dcs.stone_age;
 
 import org.json.JSONObject;
 import sk.uniba.fmph.dcs.player_board.PlayerFigures;
+import sk.uniba.fmph.dcs.player_board.PlayerResourcesAndFood;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import sk.uniba.fmph.dcs.player_board.PlayerFigures;
+import java.util.stream.Collectors;
 
-public final class TribeFedStatus implements InterfaceFeedTribe, InterfaceNewTurn {
-    private static final int MAX_FIELDS = 10;
-    private static final int FOOD_PER_FIGURE = 1;
-    
-    private final PlayerFigures figures;
-    private boolean tribeFed;
-    private int fields;
+public final class TribeFedStatus {
+    private static final int TRIBE_MAX_FIELDS = 10;
 
-    public TribeFedStatus(PlayerFigures figures) {
-        this.figures = figures;
-        this.tribeFed = false;
-        this.fields = 0;
-    }
+    private boolean tribeFed = false;
+    private int fields = 0;
+    private final PlayerResourcesAndFood playerResourcesAndFood;
+    private final PlayerFigures playerFigures;
+    private boolean foodHarvested = false;
 
-    @Override
-    public boolean feedTribeIfEnoughFood() {
-        if (tribeFed) {
-            return false;
-        }
-
-        int requiredFood = calculateRequiredFood();
-        int foodFromFields = Math.min(fields, requiredFood);
-        int remainingFood = requiredFood - foodFromFields;
-
-        // If we have enough fields to feed everyone, mark as fed
-        if (remainingFood == 0) {
-            tribeFed = true;
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean feedTribe(Collection<Effect> resources) {
-        if (tribeFed) {
-            return false;
-        }
-
-        int requiredFood = calculateRequiredFood();
-        int foodFromFields = Math.min(fields, requiredFood);
-        int remainingFood = requiredFood - foodFromFields;
-
-        // Count food resources provided
-        int foodProvided = 0;
-        for (Effect resource : resources) {
-            if (resource != Effect.FOOD) {
-                return false; // Only food resources allowed
-            }
-            foodProvided++;
-        }
-
-        // Check if enough food was provided
-        if (foodProvided == remainingFood) {
-            tribeFed = true;
-            return true;
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean doNotFeedThisTurn() {
-        if (tribeFed) {
-            return false;
-        }
-        tribeFed = true;
-        return true;
-    }
-
-    @Override
-    public boolean isTribeFed() {
-        return tribeFed;
-    }
-
-    @Override
-    public boolean newTurn() {
-        tribeFed = false;
-        return false;
-    }
-
-    public void addField() {
-        if (fields < MAX_FIELDS) {
-            fields++;
-        }
+    public TribeFedStatus(final PlayerResourcesAndFood playerResourcesAndFood, final PlayerFigures playerFigures) {
+        this.playerResourcesAndFood = playerResourcesAndFood;
+        this.playerFigures = playerFigures;
     }
 
     public int getFields() {
         return fields;
     }
 
-    private int calculateRequiredFood() {
-        return figures.getTotalFigures() * FOOD_PER_FIGURE;
+    public void addField() {
+        if (fields < TRIBE_MAX_FIELDS) {
+            fields++;
+        }
+    }
+
+    public void newTurn() {
+        harvestFood();
+        tribeFed = false;
+        foodHarvested = false;
+    }
+
+    private void harvestFood() {
+        if (!foodHarvested) {
+            playerResourcesAndFood.giveResources(Collections.nCopies(fields, Effect.FOOD));
+            foodHarvested = true;
+        }
+    }
+
+    public boolean feedTribeIfEnoughFood() {
+        if (isTribeFed()) {
+            return true;
+        }
+
+        harvestFood();
+
+        int figures = playerFigures.getTotalFigures();
+        Collection<Effect> requiredFood = Collections.nCopies(figures, Effect.FOOD);
+        if (playerResourcesAndFood.hasResources(requiredFood)) {
+            tribeFed = true;
+            return playerResourcesAndFood.takeResources(requiredFood);
+        }
+        return false;
+    }
+
+    public boolean feedTribe(final Collection<Effect> resources) {
+        harvestFood();
+
+        if (isTribeFed()) {
+            return true;
+        }
+
+        if (!playerResourcesAndFood.hasResources(resources)) {
+            return false;
+        }
+
+        int foodCount = 0;
+        int resourceCount = 0;
+        for (Effect effect : resources) {
+            if (effect == Effect.FOOD) {
+                foodCount++;
+            } else if (effect.isResource()) {
+                resourceCount++;
+            }
+        }
+
+        int requiredFoodCount = playerFigures.getTotalFigures();
+        if (foodCount >= requiredFoodCount) {
+            tribeFed = true;
+            playerResourcesAndFood.takeResources(Collections.nCopies(requiredFoodCount, Effect.FOOD));
+            return true;
+        }
+
+        if (foodCount + resourceCount < requiredFoodCount) {
+            return false;
+        }
+
+        // return false if player has more food
+        if (playerResourcesAndFood.hasResources(Collections.nCopies(foodCount + 1, Effect.FOOD))) {
+            return false;
+        }
+
+        // use all food
+        playerResourcesAndFood.takeResources(Collections.nCopies(foodCount, Effect.FOOD));
+        // use necessary resources
+        playerResourcesAndFood.takeResources(resources.stream().filter(Effect::isResource)
+                .limit(requiredFoodCount - foodCount).collect(Collectors.toList()));
+
+        tribeFed = true;
+        return true;
+    }
+
+    public boolean setTribeFed() {
+        harvestFood();
+
+        if (isTribeFed()) {
+            return true;
+        }
+
+        if (feedTribeIfEnoughFood()) {
+            return true;
+        }
+
+        // use all food
+        while (playerResourcesAndFood.hasResources(List.of(Effect.FOOD))) {
+            playerResourcesAndFood.takeResources(List.of(Effect.FOOD));
+        }
+
+        tribeFed = true;
+        return false;
+    }
+
+    public boolean isTribeFed() {
+        return tribeFed;
     }
 
     public String state() {
-        Map<String, Object> state = Map.of(
-            "tribeFed", tribeFed,
-            "fields", fields
-        );
+        Map<String, String> state = Map.of("tribeFed", String.valueOf(tribeFed), "fields", String.valueOf(fields));
         return new JSONObject(state).toString();
     }
 }

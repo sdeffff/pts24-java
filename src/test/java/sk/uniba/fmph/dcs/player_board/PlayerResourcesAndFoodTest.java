@@ -68,20 +68,16 @@ public class PlayerResourcesAndFoodTest extends TestCase {
     }
 
     private static boolean areStringsEqual(String str1, String str2) {
-        // Если длины строк разные, они точно не равны
         if (str1.length() != str2.length()) {
             return false;
         }
 
-        // Преобразуем строки в массивы символов
         char[] chars1 = str1.toCharArray();
         char[] chars2 = str2.toCharArray();
 
-        // Сортируем массивы символов
         Arrays.sort(chars1);
         Arrays.sort(chars2);
 
-        // Сравниваем отсортированные массивы
         return Arrays.equals(chars1, chars2);
     }
 }

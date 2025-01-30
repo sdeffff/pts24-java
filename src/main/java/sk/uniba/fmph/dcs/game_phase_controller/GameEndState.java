@@ -1,24 +1,15 @@
 package sk.uniba.fmph.dcs.game_phase_controller;
 
 import sk.uniba.fmph.dcs.stone_age.ActionResult;
-import sk.uniba.fmph.dcs.stone_age.InterfaceFigureLocation;
-import sk.uniba.fmph.dcs.stone_age.InterfaceNewTurn;
-import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
-import sk.uniba.fmph.dcs.stone_age.Location;
 import sk.uniba.fmph.dcs.stone_age.Effect;
 import sk.uniba.fmph.dcs.stone_age.HasAction;
+import sk.uniba.fmph.dcs.stone_age.Location;
+import sk.uniba.fmph.dcs.stone_age.PlayerOrder;
 
 import java.util.Collection;
-import java.util.Map;
 
-public final class NewRoundState implements InterfaceGamePhaseState {
-    private final Collection<InterfaceFigureLocation> places;
-    private final Map<PlayerOrder, InterfaceNewTurn> newTurnPlayerBoards;
-
-    public NewRoundState(final Collection<InterfaceFigureLocation> places,
-                         final Map<PlayerOrder, InterfaceNewTurn> newTurnPlayerBoards) {
-        this.places = places;
-        this.newTurnPlayerBoards = newTurnPlayerBoards;
+public final class GameEndState implements InterfaceGamePhaseState {
+    public GameEndState() {
     }
 
     @Override
@@ -64,12 +55,6 @@ public final class NewRoundState implements InterfaceGamePhaseState {
 
     @Override
     public HasAction tryToMakeAutomaticAction(final PlayerOrder player) {
-        for (InterfaceFigureLocation place : places) {
-            if (place.newTurn()) {
-                return HasAction.NO_ACTION_POSSIBLE;
-            }
-        }
-        newTurnPlayerBoards.get(player).newTurn();
-        return HasAction.AUTOMATIC_ACTION_DONE;
+        return HasAction.WAITING_FOR_PLAYER_ACTION;
     }
 }
